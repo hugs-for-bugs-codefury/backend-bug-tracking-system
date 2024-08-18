@@ -24,7 +24,7 @@ public abstract class User {
     private int id;
     private String name;
     private String email;
-    private String password;
+    private String passwordHash;
     private String role;
     private LocalDateTime lastLogin;
 
@@ -45,6 +45,9 @@ public abstract class User {
     public void setId(int id) {
         this.id = id;
     }
+
+
+
 
     /**
      * Gets the name of the user.
@@ -82,16 +85,16 @@ public abstract class User {
      * Gets the encrypted password of the user.
      * @return The user's password.
      */
-    public String getPassword() {
-        return password;
+    public String getPasswordHash() {
+        return passwordHash;
     }
 
     /**
      * Sets the encrypted password of the user.
-     * @param password The user's password.
+     * @param passwordHash The user's password.
      */
-    public void setPassword(String password) {
-        this.password = password;
+    public void setPasswordHash(String passwordHash) {
+        this.passwordHash = passwordHash;
     }
 
     /**
@@ -126,5 +129,6 @@ public abstract class User {
         this.lastLogin = lastLogin;
     }
 
-    // Abstract methods (if any) for subclasses to implement
+
+
 }
