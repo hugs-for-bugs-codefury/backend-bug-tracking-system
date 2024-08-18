@@ -13,4 +13,7 @@ package org.example.dao;
  */
 
 public interface IUserDAO {
+    void saveBug(Bug bug);
+    Bug findBugById(int bugId);
+    List<Bug> findBugsByProject(int projectId);
 }

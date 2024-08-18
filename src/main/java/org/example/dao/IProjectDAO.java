@@ -13,4 +13,7 @@ package org.example.dao;
  */
 
 public interface IProjectDAO {
+    void saveProject(Project project);
+    Project findProjectById(int projectId);
+    List<Project> findProjectsByManager(int managerId);
 }
