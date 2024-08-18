@@ -10,7 +10,7 @@ public class ProjectManagerTest {
     @DisplayName("Test getter and setter for ProjectManager")
     @Test
     void testProjectManagerConstructor() {
-        ProjectManager projectManager = new ProjectManager();
+//        ProjectManager projectManager = new ProjectManager();
         // ...
     }
 

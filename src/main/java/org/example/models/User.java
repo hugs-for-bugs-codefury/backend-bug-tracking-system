@@ -28,6 +28,16 @@ public abstract class User {
     private String role;
     private LocalDateTime lastLogin;
 
+
+    public User(int id, String name, String email, String passwordHash, String role, LocalDateTime lastLogin) {
+        this.id = id;
+        this.name = name;
+        this.email = email;
+        this.passwordHash = passwordHash;
+        this.role = role;
+        this.lastLogin = lastLogin;
+    }
+
     // Getters and Setters for each field
 
     /**
