@@ -15,32 +15,4 @@ import org.example.models.User;
  */
 
 public interface IUserDAO {
-
-    /**
-     * Register a new user with the given username, email, password, and role.
-     * @param username The username of the user.
-     * @param email The email of the user.
-     * @param password The password of the user.
-     * @param role The role of the user.
-     * @return The registered user.
-     */
-    User registerUser(String username, String email, String password, String role);
-
-
-    /**
-     * Login a user with the given email and password.
-     * @param email The email of the user.
-     * @param password The password of the user.
-     * @return The logged in user.
-     */
-    User loginUser(String email, String password);
-
-
-    /**
-     * Get a user by their ID.
-     * @param userId The ID of the user.
-     * @return The user with the given ID.
-     */
-    User getUser(int userId);
-
 }
