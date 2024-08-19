@@ -12,4 +12,7 @@ package org.example.dao;
  */
 
 public interface IBugDAO {
+    void saveBug(Bug bug);
+    Bug findBugById(int bugId);
+    List<Bug> findBugsByProject(int projectId);
 }

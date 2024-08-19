@@ -16,5 +16,11 @@ import java.util.Date;
  */
 
 public interface IProjectDAO {
+<<<<<<< HEAD
 
+=======
+    void saveProject(Project project);
+    Project findProjectById(int projectId);
+    List<Project> findProjectsByManager(int managerId);
+>>>>>>> refs/remotes/origin/main
 }
