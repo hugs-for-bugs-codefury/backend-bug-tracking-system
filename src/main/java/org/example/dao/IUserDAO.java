@@ -1,5 +1,7 @@
 package org.example.dao;
 
+import org.example.models.User;
+
 /**
  * IUserDAO defines the data access methods related to User entities.
  * This interface abstracts the database operations for the User model.
@@ -13,4 +15,7 @@ package org.example.dao;
  */
 
 public interface IUserDAO {
+    void saveBug(Bug bug);
+    Bug findBugById(int bugId);
+    List<Bug> findBugsByProject(int projectId);
 }
