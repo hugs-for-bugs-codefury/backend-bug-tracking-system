@@ -1,5 +1,6 @@
 package org.example.services;
 
+import org.example.models.Project;
 import org.example.models.User;
 
 public interface IUserService {
@@ -28,4 +29,13 @@ public interface IUserService {
      * @return
      */
     User getUser(int userId);
+
+
+    /**
+     * Get a project by id
+     * @param projectId
+     * @return
+     */
+    Project getProject(int projectId);
+
 }

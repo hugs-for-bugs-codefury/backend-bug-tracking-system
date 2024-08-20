@@ -1,5 +1,7 @@
 package org.example.dao;
 
+import org.example.models.Developer;
+
 /**
  * IDeveloperDAO defines the data access methods related to Developer entities.
  * This interface abstracts the database operations for the Developer model.
@@ -12,5 +14,8 @@ package org.example.dao;
  */
 
 public interface IDeveloperDAO {
+    public void saveDeveloper(Developer developer);
+    public Developer findDeveloperById(int developerId);
+    public Developer findDeveloperByEmail(String email);
 
 }

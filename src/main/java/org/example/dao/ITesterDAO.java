@@ -1,6 +1,8 @@
 package org.example.dao;
 
 
+import org.example.models.Tester;
+
 /**
  * ITesterDAO defines the data access methods related to Tester entities.
  * This interface abstracts the database operations for the Tester model.
@@ -13,4 +15,8 @@ package org.example.dao;
  */
 
 public interface ITesterDAO {
+
+        public void saveTester(Tester tester);
+        public Tester findTesterById(int testerId);
+        public Tester findTesterByEmail(String email);
 }

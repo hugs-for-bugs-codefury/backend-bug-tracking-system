@@ -32,8 +32,8 @@ public class Developer extends User {
      * @param lastLogin   The timestamp of the user's last login.
      */
     public Developer(String developerId, int id, String name, String email,
-                     String passwordHash, String role, LocalDateTime lastLogin) {
-        super(id, name, email, passwordHash, role, lastLogin); // Call the User class constructor
+                     String passwordHash, String role) {
+        super(id, name, email, passwordHash, role); // Call the User class constructor
         this.developerId = developerId;
     }
 
@@ -52,11 +52,12 @@ public class Developer extends User {
      */
     public Developer(String developerId, List<String> projectIds, List<String> assignedBugIds,
                      int id, String name, String email, String passwordHash,
-                     String role, LocalDateTime lastLogin) {
-        super(id, name, email, passwordHash, role, lastLogin); // Call the User class constructor
+                     String role) {
+        super(id, name, email, passwordHash, role); // Call the User class constructor
         this.developerId = developerId;
         this.projectIds = projectIds;
         this.assignedBugIds = assignedBugIds;
+
     }
 
 
@@ -114,12 +115,5 @@ public class Developer extends User {
         this.assignedBugIds = assignedBugIds;
     }
 
-    /**
-     * Adds a bug ID to the list of bugs assigned to the developer.
-     *
-     * @param bugId The bug ID to add to the assigned bug IDs list.
-     */
-    public void assignBug(String bugId) {
-        this.assignedBugIds.add(bugId);
-    }
+
 }

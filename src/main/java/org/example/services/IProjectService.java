@@ -16,12 +16,21 @@ public interface IProjectService {
     Project createProject(String name, Date startDate, int projectManagerId);
 
     /**
-     * Assign a team member to a project
+     * Assign a developer to a project
      * @param projectId
      * @param userId
-     * @param role
      */
-    void assignTeamMember(int projectId, int userId, String role);
+    void assignDeveloper(int projectId, int userId);
+
+
+    /**
+     * Assign a tester to a project
+     * @param projectId
+     * @param userId
+     */
+    void assignTester(int projectId, int userId);
+
+
 
     /**
      * Get a project by id

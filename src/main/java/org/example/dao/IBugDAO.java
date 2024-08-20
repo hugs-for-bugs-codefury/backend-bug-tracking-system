@@ -1,5 +1,9 @@
 package org.example.dao;
 
+import org.example.models.Bug;
+
+import java.util.List;
+
 /**
  * IBugDAO defines the data access methods related to Bug entities.
  * This interface abstracts the database operations for the Bug model.
@@ -12,7 +16,10 @@ package org.example.dao;
  */
 
 public interface IBugDAO {
+
     void saveBug(Bug bug);
     Bug findBugById(int bugId);
     List<Bug> findBugsByProject(int projectId);
+    void deleteBugById(int bugId);
+
 }

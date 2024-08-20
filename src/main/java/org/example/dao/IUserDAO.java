@@ -1,6 +1,10 @@
 package org.example.dao;
 
+import org.example.models.Bug;
 import org.example.models.User;
+
+import java.util.List;
+import java.util.Optional;
 
 /**
  * IUserDAO defines the data access methods related to User entities.
@@ -15,7 +19,7 @@ import org.example.models.User;
  */
 
 public interface IUserDAO {
-    void saveBug(Bug bug);
-    Bug findBugById(int bugId);
-    List<Bug> findBugsByProject(int projectId);
+    public User findByEmail(String email);
+    public User findByID(int id);
+
 }

@@ -1,4 +1,39 @@
 package org.example.factory.impl;
 
-public class ServiceFactory {
+import org.example.factory.IServiceFactory;
+import org.example.models.User;
+import org.example.services.impl.*;
+
+import java.util.Objects;
+
+public abstract class ServiceFactory implements IServiceFactory {
+    public static Object getService(String serviceName) {
+        if (Objects.equals(serviceName, "UserService")) {
+            return new UserServiceImpl();
+        } else if (Objects.equals(serviceName, "ProjectService")) {
+            return new ProjectServiceImpl();
+        } else if (Objects.equals(serviceName, "TesterService")) {
+            return new TesterServiceImpl();
+        } else if (Objects.equals(serviceName, "DeveloperService")) {
+            return new DeveloperServiceImpl();
+        } else if (Objects.equals(serviceName, "ProjectManagerService")) {
+            return new ProjectManagerServiceImpl();
+        } else if (Objects.equals(serviceName, "BugService")) {
+            return new BugServiceImpl();
+        }
+        return null;
+    }
+    public static Object getService(String serviceName, User as) {
+
+        if (Objects.equals(serviceName, "TesterService")) {
+            return new TesterServiceImpl(as);
+        } else if (Objects.equals(serviceName, "DeveloperService")) {
+            return new DeveloperServiceImpl(as);
+        } else if (Objects.equals(serviceName, "ProjectManagerService")) {
+            return new ProjectManagerServiceImpl(as);
+        }
+        return null;
+    }
+
+
 }

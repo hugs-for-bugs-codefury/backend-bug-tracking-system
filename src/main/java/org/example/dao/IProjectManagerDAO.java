@@ -1,5 +1,7 @@
 package org.example.dao;
 
+import org.example.models.ProjectManager;
+
 /**
  * IProjectManagerDAO defines the data access methods related to ProjectManager entities.
  * This interface abstracts the database operations for the ProjectManager model.
@@ -12,5 +14,9 @@ package org.example.dao;
  */
 
 public interface IProjectManagerDAO {
+    public void saveProjectManager(ProjectManager manager);
+    public ProjectManager findProjectManagerById(int managerId);
+    public ProjectManager findProjectManagerByEmail(String email);
+
 
 }

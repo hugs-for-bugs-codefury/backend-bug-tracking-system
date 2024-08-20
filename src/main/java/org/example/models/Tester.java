@@ -12,7 +12,7 @@ import java.util.List;
  * - List<Bug> reportedBugs: The list of bugs reported by the tester.
  */
 public class Tester extends User {
-    private String testerId;
+    private final String testerId;
     private List<Project> projects;
     private List<Bug> reportedBugs;
 
@@ -28,8 +28,8 @@ public class Tester extends User {
      * @param lastLogin     The timestamp of the user's last login.
      */
     public Tester(String testerId, int id, String name, String email,
-                  String passwordHash, String role, LocalDateTime lastLogin) {
-        super(id, name, email, passwordHash, role, lastLogin); // Call the User class constructor
+                  String passwordHash, String role) {
+        super(id, name, email, passwordHash, role); // Call the User class constructor
         this.testerId = testerId;
     }
 
@@ -48,11 +48,19 @@ public class Tester extends User {
      */
     public Tester(String testerId, List<Project> projects, List<Bug> reportedBugs,
                   int id, String name, String email, String passwordHash,
-                  String role, LocalDateTime lastLogin) {
-        super(id, name, email, passwordHash, role, lastLogin); // Call the User class constructor
+                  String role) {
+        super(id, name, email, passwordHash, role); // Call the User class constructor
         this.testerId = testerId;
         this.projects = projects;
         this.reportedBugs = reportedBugs;
+    }
+
+    /**
+     * Retrieves the unique identifier of the tester.
+     * @return The tester ID.
+     */
+    public String getTesterId() {
+        return testerId;
     }
 
 

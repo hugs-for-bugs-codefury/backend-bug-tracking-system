@@ -29,8 +29,8 @@ public class ProjectManager extends User {
      * @param lastLogin    The last login time of the user.
      * @param managerId    The unique identifier for the project manager.
      */
-    public ProjectManager(int id, String name, String email, String passwordHash, String role, LocalDateTime lastLogin, String managerId) {
-        super(id, name, email, passwordHash, role, lastLogin);
+    public ProjectManager(int id, String name, String email, String passwordHash, String role, String managerId) {
+        super(id, name, email, passwordHash, role);
         this.managerId = managerId;
     }
 

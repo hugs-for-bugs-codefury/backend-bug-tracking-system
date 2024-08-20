@@ -1,4 +1,16 @@
 package org.example.services;
 
-public interface IDeveloperService {
+import org.example.models.Bug;
+import org.example.models.Developer;
+import org.example.models.Project;
+
+import java.util.List;
+
+public interface IDeveloperService extends IUserService{
+    public Developer getCurrentDeveloper();
+    public Developer getDeveloper(int developerId);
+    public void closeBug(int bugId);
+    public Project getAssignedProject();
+    public Project getAssignedProject(int developerId);
+    public List<Bug> getAssignedBugs();
 }
