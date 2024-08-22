@@ -25,10 +25,10 @@ public class Bug {
     private String description;
     private String severity;
     private LocalDateTime createdOn;
-    private Tester createdBy;
+    private int createdById;
     private Developer assignedTo;
     private String status;
-    private Project project;
+    private int projectId;
 
     /**
      * Constructs a Bug object with the specified parameters.
@@ -38,18 +38,29 @@ public class Bug {
      * @param description A detailed description of the bug.
      * @param severity The severity level of the bug (e.g., "Low", "Medium", "High").
      * @param createdOn The timestamp when the bug was reported.
-     * @param createdBy The Tester who reported the bug.
-     * @param project The project to which this bug is related.
+     * @param createdById The id of tester who reported the bug.
+     * @param projectId The project id to which this bug is related.
      */
-    public Bug(int bugId, String title, String description, String severity, LocalDateTime createdOn, Tester createdBy, Project project) {
+    public Bug(int bugId, String title, String description, String severity, LocalDateTime createdOn, int createdById, int projectId) {
         this.bugId = bugId;
         this.title = title;
         this.description = description;
         this.severity = severity;
         this.createdOn = createdOn;
-        this.createdBy = createdBy;
+        this.createdById = createdById;
         this.status = "Open"; // Default status when a bug is created
-        this.project = project;
+        this.projectId = projectId;
+    }
+
+
+    public Bug(String title, String description, String severity, LocalDateTime createdOn, int createdById, int projectId) {
+        this.title = title;
+        this.description = description;
+        this.severity = severity;
+        this.createdOn = createdOn;
+        this.createdById = createdById;
+        this.status = "Open"; // Default status when a bug is created
+        this.projectId = projectId;
     }
 
     /**
@@ -147,8 +158,8 @@ public class Bug {
      *
      * @return The Tester who created the bug.
      */
-    public Tester getCreatedBy() {
-        return createdBy;
+    public int getCreatedById() {
+        return createdById;
     }
 
     /**
@@ -156,8 +167,8 @@ public class Bug {
      *
      * @param createdBy The bug's new creator (Tester).
      */
-    public void setCreatedBy(Tester createdBy) {
-        this.createdBy = createdBy;
+    public void setCreatedById(int createdById) {
+        this.createdById = createdById;
     }
 
     /**
@@ -201,8 +212,8 @@ public class Bug {
      *
      * @return The project associated with the bug.
      */
-    public Project getProject() {
-        return project;
+    public int getProjectId() {
+        return projectId;
     }
 
     /**
@@ -210,8 +221,8 @@ public class Bug {
      *
      * @param project The bug's new associated project.
      */
-    public void setProject(Project project) {
-        this.project = project;
+    public void setProject(int projectId) {
+        this.projectId = projectId;
     }
 
     /**
@@ -222,8 +233,8 @@ public class Bug {
     @Override
     public String toString() {
         return "Bug [id=" + bugId + ", title=" + title + ", description=" + description + ", severity=" + severity
-                + ", createdOn=" + createdOn + ", createdBy=" + createdBy.getName() + ", assignedTo="
+                + ", createdOn=" + createdOn + ", createdBy=" + createdById + ", assignedTo="
                 + (assignedTo != null ? assignedTo.getName() : "Unassigned") + ", status=" + status + ", project="
-                + project.getProjectName() + "]";
+                +projectId + "]";
     }
 }

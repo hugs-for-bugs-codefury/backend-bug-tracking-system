@@ -1,13 +1,18 @@
 package org.example.services.impl;
 
+import org.example.dao.impl.ProjectManagerDAOImpl;
 import org.example.models.*;
 import org.example.services.IProjectManagerService;
 
-public class ProjectManagerServiceImpl extends UserServiceImpl implements IProjectManagerService   {
+import java.time.LocalDateTime;
+
+public class ProjectManagerServiceImpl extends UserServiceImpl implements IProjectManagerService {
     ProjectManager user;
 
     public ProjectManagerServiceImpl(User user) {
-        if(!user.getRole().equals("projectManager")) {
+        super(user);
+
+        if (!user.getRole().equals("projectManager")) {
             throw new IllegalArgumentException("User is not a project manager");
         }
 
@@ -19,27 +24,65 @@ public class ProjectManagerServiceImpl extends UserServiceImpl implements IProje
     }
 
     @Override
+    public ProjectManager registerUser(String username, String email, String password) {
+        ProjectManagerDAOImpl projectManagerDAO = new ProjectManagerDAOImpl();
+        return projectManagerDAO.saveUser(username, email, password);
+    }
+
+    @Override
     public ProjectManager getCurrentProjectManager() {
         return user;
     }
 
     @Override
-    public Project createProject(String title, String description, String startDate) {
-        return null;
+    public ProjectManager getProjectManager(int projectManagerId) {
+        ProjectManagerDAOImpl projectManagerDAO = new ProjectManagerDAOImpl();
+        return projectManagerDAO.findByID(projectManagerId);
     }
 
+
     @Override
-    public ProjectManager getTester(int projectManagerId) {
-        return null;
+    public Project createProject(String name, LocalDateTime startDate) {
+        if (user == null) {
+            throw new IllegalArgumentException("Unauthorized access");
+        }
+        ProjectServiceImpl projectService = new ProjectServiceImpl();
+        return projectService.createProject(name, startDate, user.getId());
     }
+
 
     @Override
     public void assignTester(Project project, Tester tester) {
+        if (user == null) {
+            throw new IllegalArgumentException("Unauthorized access");
+        }
+        ProjectServiceImpl projectService = new ProjectServiceImpl();
+        projectService.assignTester(project.getProjectId(), tester.getId());
 
     }
 
     @Override
     public void assignDeveloper(Bug bug, Developer developer) {
+        if (user == null) {
+            throw new IllegalArgumentException("Unauthorized access");
+        }
+        BugServiceImpl bugService = new BugServiceImpl();
+        bugService.assignDeveloper(bug.getId(), developer.getId());
+
+    }
+
+    @Override
+    public void login(String email, String password) {
+        ProjectManagerDAOImpl projectManagerDAO = new ProjectManagerDAOImpl();
+        try {
+
+            super.login(email, password);
+
+            this.user = projectManagerDAO.findByEmail(email);
+
+        } catch (Exception e) {
+            throw new IllegalArgumentException("Invalid email or password");
+        }
 
     }
 }

@@ -1,7 +1,11 @@
 package org.example.dao;
 
 
+import org.example.models.Bug;
+import org.example.models.Developer;
 import org.example.models.Project;
+import org.example.models.Tester;
+
 import java.util.Date;
 import java.util.List;
 
@@ -18,8 +22,16 @@ import java.util.List;
 
 public interface IProjectDAO {
 
-    void saveProject(Project project);
-    Project findProjectById(int projectId);
-    List<Project> findProjectsByManager(int managerId);
+    public Project saveProject(Project project);
+    public Project findByID(int projectId);
+    public List<Project> findProjectsByManager(int managerId);
+    public List<Project> findProjectsByTester(int testerId);
+    public Project findProjectByDeveloper(int developerId);
+    public Project assignTester(int projectId, int testerId);
+    public Project assignDeveloper(int projectId, int developerId);
+    public List<Developer> getAssignedDevelopers(int projectId);
+    public List<Tester> getAssignedTesters(int projectId);
+    public List<Bug> getProjectBugs(int projectId);
+
 
 }

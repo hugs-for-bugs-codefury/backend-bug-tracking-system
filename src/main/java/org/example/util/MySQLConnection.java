@@ -18,7 +18,7 @@ public class MySQLConnection  {
      * @throws java.sql.SQLException if a database access error occurs.
      */
 
-    public Connection getConnection() throws SQLException {
+    public static Connection getConnection() throws SQLException {
         // Load MySQL JDBC driver
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");

@@ -19,7 +19,7 @@ import java.time.LocalDateTime;
  *
  * Subclasses should implement specific behaviors and attributes for different types of users.
  */
-public abstract class User {
+public class User {
 
     private int id;
     private String name;
@@ -31,6 +31,15 @@ public abstract class User {
 
     public User(int id, String name, String email, String passwordHash, String role) {
         this.id = id;
+        this.name = name;
+        this.email = email;
+        this.passwordHash = passwordHash;
+        this.role = role;
+
+    }
+
+    // constructor for unregister user
+    public User(String name, String email, String passwordHash, String role) {
         this.name = name;
         this.email = email;
         this.passwordHash = passwordHash;

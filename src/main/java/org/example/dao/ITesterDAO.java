@@ -1,7 +1,10 @@
 package org.example.dao;
 
 
+import org.example.models.Bug;
 import org.example.models.Tester;
+
+import java.util.List;
 
 /**
  * ITesterDAO defines the data access methods related to Tester entities.
@@ -14,9 +17,11 @@ import org.example.models.Tester;
  * - void deleteById(int id): Delete a tester by their ID.
  */
 
-public interface ITesterDAO {
+public interface ITesterDAO extends IUserDAO {
 
-        public void saveTester(Tester tester);
-        public Tester findTesterById(int testerId);
-        public Tester findTesterByEmail(String email);
+        public Tester saveUser(String name, String email, String password);
+        public Tester findByID(int testerId);
+        public Tester findByEmail(String email);
+        public List<Tester> findTestersByProject(int projectId);
+
 }

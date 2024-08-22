@@ -19,7 +19,9 @@ import java.util.Optional;
  */
 
 public interface IUserDAO {
-    public User findByEmail(String email);
-    public User findByID(int id);
+    public  User findByEmail(String email) throws Exception;
+    public User findByID(int id) throws Exception;
+    public User saveUser(String name, String email, String password, String role) throws Exception;
+    public boolean comparePassword(String email, String password) throws Exception;
 
 }

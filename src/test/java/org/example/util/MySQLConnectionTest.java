@@ -12,14 +12,8 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assumptions.*;
 
 public class MySQLConnectionTest {
-    static MySQLConnection mySQLConnection;
 
 
-
-    @BeforeAll
-    static void setup() {
-        mySQLConnection = new MySQLConnection();
-    }
 
 
     @DisplayName("Test MySQL Connection")
@@ -27,7 +21,7 @@ public class MySQLConnectionTest {
     void testConnection() {
 
         try {
-            Connection connection = mySQLConnection.getConnection();
+            Connection connection = MySQLConnection.getConnection();
             assertNotNull(connection, "Connection is null");
             assertFalse(connection.isClosed(), "Connection is closed");
             connection.close();

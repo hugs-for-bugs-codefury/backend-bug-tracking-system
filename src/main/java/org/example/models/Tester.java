@@ -1,6 +1,7 @@
 package org.example.models;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -12,54 +13,49 @@ import java.util.List;
  * - List<Bug> reportedBugs: The list of bugs reported by the tester.
  */
 public class Tester extends User {
-    private final String testerId;
+    private final int testerId;
     private List<Project> projects;
     private List<Bug> reportedBugs;
 
+
     /**
-     * Constructs a new Tester with the specified tester ID.
-     *
-     * @param testerId     The unique identifier for the tester.
-     * @param id            The user ID.
-     * @param name          The user's name.
-     * @param email         The user's email address.
-     * @param passwordHash  The hashed password for authentication.
-     * @param role          The user's role (e.g., "tester").
-     * @param lastLogin     The timestamp of the user's last login.
+     * Constructs a new Tester with the specified tester ID, name, email, and password hash.
+     * @param id
+     * @param testerId
+     * @param name
+     * @param email
+     * @param passwordHash
      */
-    public Tester(String testerId, int id, String name, String email,
-                  String passwordHash, String role) {
-        super(id, name, email, passwordHash, role); // Call the User class constructor
+    public Tester(int id, int testerId, String name, String email, String passwordHash){
+        super(id, name, email, passwordHash, "tester");
         this.testerId = testerId;
+        this.projects = new ArrayList<>();
+        this.reportedBugs = new ArrayList<>();
+
+
     }
 
     /**
-     * Constructs a new Tester with the specified tester ID, project list, and reported bugs list.
-     *
-     * @param testerId     The unique identifier for the tester.
-     * @param projects     The list of projects the tester is working on.
-     * @param reportedBugs The list of bugs reported by the tester.
-     * @param id            The user ID.
-     * @param name          The user's name.
-     * @param email         The user's email address.
-     * @param passwordHash  The hashed password for authentication.
-     * @param role          The user's role (e.g., "tester").
-     * @param lastLogin     The timestamp of the user's last login.
+      * Constructs a new Tester with the specified tester ID, name, email, password hash, projects, and reported bugs.     * @param testerId
+     * @param name
+     * @param email
+     * @param passwordHash
+     * @param projects
+     * @param reportedBugs
      */
-    public Tester(String testerId, List<Project> projects, List<Bug> reportedBugs,
-                  int id, String name, String email, String passwordHash,
-                  String role) {
-        super(id, name, email, passwordHash, role); // Call the User class constructor
+    public Tester(int testerId, String name, String email, String passwordHash, List<Project> projects, List<Bug> reportedBugs) {
+        super(name, email, passwordHash, "tester");
         this.testerId = testerId;
         this.projects = projects;
         this.reportedBugs = reportedBugs;
     }
 
+
     /**
      * Retrieves the unique identifier of the tester.
      * @return The tester ID.
      */
-    public String getTesterId() {
+    public int getTesterId() {
         return testerId;
     }
 

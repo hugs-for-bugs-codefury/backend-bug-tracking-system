@@ -29,7 +29,7 @@ INSERT INTO Projects (project_name, start_date, project_manager_id) VALUES
 
 
 -- Insert Project Team Members
-INSERT INTO Project_Team_Members (project_id, user_id, role) VALUES
+INSERT INTO Project_Team_Members (project_id, user_id, role) VALUESv
 ((SELECT id FROM Projects WHERE project_name = 'Project Alpha'), (SELECT id FROM Developers WHERE id = (SELECT id FROM Users WHERE username = 'dev_sara')), 'Developer'),
 ((SELECT id FROM Projects WHERE project_name = 'Project Alpha'), (SELECT id FROM Testers WHERE id = (SELECT id FROM Users WHERE username = 'tester_mike')), 'Tester'),
 ((SELECT id FROM Projects WHERE project_name = 'Project Beta'), (SELECT id FROM Developers WHERE id = (SELECT id FROM Users WHERE username = 'dev_emily')), 'Developer'),

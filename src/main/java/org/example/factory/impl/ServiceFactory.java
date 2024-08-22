@@ -21,19 +21,9 @@ public abstract class ServiceFactory implements IServiceFactory {
         } else if (Objects.equals(serviceName, "BugService")) {
             return new BugServiceImpl();
         }
-        return null;
+        return new UserServiceImpl();
     }
-    public static Object getService(String serviceName, User as) {
 
-        if (Objects.equals(serviceName, "TesterService")) {
-            return new TesterServiceImpl(as);
-        } else if (Objects.equals(serviceName, "DeveloperService")) {
-            return new DeveloperServiceImpl(as);
-        } else if (Objects.equals(serviceName, "ProjectManagerService")) {
-            return new ProjectManagerServiceImpl(as);
-        }
-        return null;
-    }
 
 
 }

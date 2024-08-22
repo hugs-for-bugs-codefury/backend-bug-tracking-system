@@ -17,9 +17,13 @@ import java.util.List;
 
 public interface IBugDAO {
 
-    void saveBug(Bug bug);
-    Bug findBugById(int bugId);
-    List<Bug> findBugsByProject(int projectId);
-    void deleteBugById(int bugId);
+    public Bug saveBug(Bug bug);
+    public Bug findBugById(int bugId);
+    public List<Bug> findBugsByProject(int projectId);
+    public List<Bug> findBugsByTester(int testerId);
+    public void deleteBugById(int bugId);
+    public Bug assignTester(int bugId, int testerId);
+    public Bug assignDeveloper(int bugId, int developerId);
+    public Bug closeBug(int bugId);
 
 }

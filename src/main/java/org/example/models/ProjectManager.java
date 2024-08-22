@@ -13,8 +13,8 @@ import java.util.List;
  */
 
 public class ProjectManager extends User {
-    private String managerId;  // Unique identifier for the project manager
-    private List<String> projectIds;  // List of project IDs managed by this project manager
+    private int managerId;  // Unique identifier for the project manager
+    private List<Integer> projectIds;  // List of project IDs managed by this project manager
 
 
     /**
@@ -29,10 +29,12 @@ public class ProjectManager extends User {
      * @param lastLogin    The last login time of the user.
      * @param managerId    The unique identifier for the project manager.
      */
-    public ProjectManager(int id, String name, String email, String passwordHash, String role, String managerId) {
-        super(id, name, email, passwordHash, role);
+    public ProjectManager(int id,  int managerId, String name, String email, String passwordHash) {
+        super(id, name, email, passwordHash, "project_manager");
         this.managerId = managerId;
     }
+
+
 
 
     /**
@@ -40,7 +42,7 @@ public class ProjectManager extends User {
      *
      * @return the manager ID as a String.
      */
-    public String getManagerId() {
+    public int getManagerId() {
         return managerId;
     }
 
@@ -49,7 +51,7 @@ public class ProjectManager extends User {
      *
      * @param managerId the new manager ID to set.
      */
-    public void setManagerId(String managerId) {
+    public void setManagerId(int managerId) {
         this.managerId = managerId;
     }
 
@@ -58,7 +60,7 @@ public class ProjectManager extends User {
      *
      * @return a list of project IDs as Strings.
      */
-    public List<String> getProjectIds() {
+    public List<Integer> getProjectIds() {
         return projectIds;
     }
 
@@ -67,7 +69,7 @@ public class ProjectManager extends User {
      *
      * @param projectIds the new list of project IDs to assign to this manager.
      */
-    public void setProjectIds(List<String> projectIds) {
+    public void setProjectIds(List<Integer> projectIds) {
         this.projectIds = projectIds;
     }
 }

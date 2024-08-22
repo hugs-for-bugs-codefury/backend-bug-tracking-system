@@ -2,11 +2,13 @@ package org.example.services;
 
 import org.example.models.*;
 
-public interface IProjectManagerService extends IUserService {
+import java.time.LocalDateTime;
 
+public interface IProjectManagerService extends IUserService {
+    public ProjectManager registerUser(String username, String email, String password);
     public ProjectManager getCurrentProjectManager();
-    public ProjectManager getTester(int projectManagerId);
-    Project createProject(String title, String description, String startDate);
+    public ProjectManager getProjectManager(int projectManagerId);
+    Project createProject(String name, LocalDateTime startDate);
     public void assignTester(Project project, Tester tester);
     public void assignDeveloper(Bug bug, Developer developer);
 

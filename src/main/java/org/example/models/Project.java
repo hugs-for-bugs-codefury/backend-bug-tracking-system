@@ -1,6 +1,7 @@
 package org.example.models;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -18,12 +19,13 @@ import java.util.List;
  */
 
 public class Project {
-    private String projectId;
+    private int projectId;
     private String projectName;
     private LocalDateTime startDate;
     private String status;
-    private String projectManagerId;
-    private List<String> teamMembers;
+    private int projectManagerId;
+    private List<Integer> developers;
+    private List<Integer> testers;
     private List<Bug> bugs; // New property for bugs
 
     /**
@@ -37,14 +39,27 @@ public class Project {
      * @param projectManagerId The unique identifier of the project manager.
      * @param teamMembers      The list of unique identifiers for the team members assigned to the project.
      */
-    public Project(String projectId, String projectName, LocalDateTime startDate,
-                   String status, String projectManagerId, List<String> teamMembers) {
+    public Project(int projectId, String projectName, LocalDateTime startDate,
+                   String status, int projectManagerId, List<Integer> developers, List<Integer> testers, List<Bug> bugs) {
         this.projectId = projectId;
         this.projectName = projectName;
         this.startDate = startDate;
         this.status = status;
         this.projectManagerId = projectManagerId;
-        this.teamMembers = teamMembers;
+        this.developers = developers;
+        this.testers = testers;
+        this.bugs = bugs;
+
+    }
+
+    public Project(String projectName, LocalDateTime startDate, String status, int projectManagerId) {
+        this.projectName = projectName;
+        this.startDate = startDate;
+        this.status = status;
+        this.projectManagerId = projectManagerId;
+        this.developers = new ArrayList<>();
+        this.testers = new ArrayList<>();
+        this.bugs = new ArrayList<>();
     }
 
     /**
@@ -52,7 +67,7 @@ public class Project {
      *
      * @return the project ID as a String.
      */
-    public String getProjectId() {
+    public int getProjectId() {
         return projectId;
     }
 
@@ -61,7 +76,7 @@ public class Project {
      *
      * @param projectId the new project ID to set.
      */
-    public void setProjectId(String projectId) {
+    public void setProjectId(int projectId) {
         this.projectId = projectId;
     }
 
@@ -124,7 +139,7 @@ public class Project {
      *
      * @return the project manager's ID as a String.
      */
-    public String getProjectManagerId() {
+    public int getProjectManagerId() {
         return projectManagerId;
     }
 
@@ -133,7 +148,7 @@ public class Project {
      *
      * @param projectManagerId the new project manager ID to set.
      */
-    public void setProjectManagerId(String projectManagerId) {
+    public void setProjectManagerId(int projectManagerId) {
         this.projectManagerId = projectManagerId;
     }
 
@@ -142,18 +157,20 @@ public class Project {
      *
      * @return a list of team members, where each member is represented by a String (e.g., member ID or name).
      */
-    public List<String> getTeamMembers() {
-        return teamMembers;
+    public List<Integer> getDevelopers(){
+        return developers;
+    }
+    public List<Integer> getTesters(){
+        return testers;
+    }
+    public void setDevelopers(List<Integer> developers){
+        this.developers = developers;
+    }
+    public void setTesters(List<Integer> testers){
+        this.testers = testers;
     }
 
-    /**
-     * Sets or updates the list of team members assigned to the project.
-     *
-     * @param teamMembers the new list of team members to assign to the project.
-     */
-    public void setTeamMembers(List<String> teamMembers) {
-        this.teamMembers = teamMembers;
-    }
+
 
     /**
      * Retrieves the list of bugs reported in the project.

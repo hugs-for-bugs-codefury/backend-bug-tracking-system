@@ -1,5 +1,7 @@
 package org.example.services.impl;
 
+import org.example.dao.impl.DeveloperDAOImpl;
+import org.example.dao.impl.ProjectManagerDAOImpl;
 import org.example.models.Bug;
 import org.example.models.Developer;
 import org.example.models.Project;
@@ -13,7 +15,9 @@ public class DeveloperServiceImpl extends UserServiceImpl  implements IDeveloper
     Developer user;
 
     public DeveloperServiceImpl(User user) {
-        if(!user.getRole().equals("Developer")) {
+        super(user);
+
+        if(!user.getRole().equals("developer")) {
             throw new IllegalArgumentException("User is not a developer");
         }
         this.user = (Developer) user;
@@ -25,33 +29,67 @@ public class DeveloperServiceImpl extends UserServiceImpl  implements IDeveloper
 
 
     @Override
+    public Developer registerUser(String name, String email, String password) {
+        DeveloperDAOImpl developerDAO = new DeveloperDAOImpl();
+        return developerDAO.saveUser(name, email, password);
+
+    }
+
+    @Override
     public Developer getCurrentDeveloper() {
         return user;
     }
 
     @Override
     public Developer getDeveloper(int developerId) {
-        return null;
+        DeveloperDAOImpl developerDAO = new DeveloperDAOImpl();
+        return developerDAO.findByID(developerId);
     }
 
     @Override
     public void closeBug(int bugId) {
+        BugServiceImpl bugService = new BugServiceImpl();
+        bugService.closeBug(bugId);
+
+
 
     }
 
     @Override
     public Project getAssignedProject() {
-        return null;
+        DeveloperDAOImpl developerDAO = new DeveloperDAOImpl();
+        return developerDAO.getAssignedProject(user.getId());
+
     }
 
     @Override
     public Project getAssignedProject(int developerId) {
-        return null;
+        DeveloperDAOImpl developerDAO = new DeveloperDAOImpl();
+        return developerDAO.getAssignedProject(developerId);
     }
 
     @Override
     public List<Bug> getAssignedBugs() {
-        return new ArrayList<>();
+        DeveloperDAOImpl developerDAO = new DeveloperDAOImpl();
+        return developerDAO.getAssignedBugs(user.getId());
     }
+
+
+    @Override
+    public void login(String email, String password) {
+        DeveloperDAOImpl developerDAO = new DeveloperDAOImpl();
+        try {
+
+            super.login(email, password);
+
+            this.user = developerDAO.findByEmail(email);
+
+        } catch (Exception e) {
+            throw new IllegalArgumentException("Invalid email or password");
+        }
+
+    }
+
+
 
 }

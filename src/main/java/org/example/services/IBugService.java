@@ -2,6 +2,8 @@ package org.example.services;
 
 import org.example.models.Bug;
 
+import java.util.List;
+
 public interface IBugService {
 
     /**
@@ -20,11 +22,13 @@ public interface IBugService {
      * @param bugId
      * @param developerId
      */
-    void assignBug(int bugId, int developerId);
+    Bug assignDeveloper(int bugId, int developerId);
 
     /**
      * Close a bug
      * @param bugId
      */
     void closeBug(int bugId);
+
+    List<Bug> getBugsByTester(int testerId);
 }

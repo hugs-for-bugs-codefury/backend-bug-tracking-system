@@ -8,96 +8,115 @@ DROP TABLE IF EXISTS Projects;
 DROP TABLE IF EXISTS Testers;
 DROP TABLE IF EXISTS Developers;
 DROP TABLE IF EXISTS ProjectManagers;
-DROP TABLE IF EXISTS Users;
+DROP TABLE IF EXISTS users;
 
 -- Create Users table
-CREATE TABLE Users (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    username VARCHAR(50) NOT NULL UNIQUE,
+CREATE TABLE users (
+    user_id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(50) NOT NULL UNIQUE,
     email VARCHAR(100) NOT NULL UNIQUE,
     password_hash VARCHAR(255) NOT NULL,
     last_login TIMESTAMP NULL,
-    user_type ENUM('Project Manager', 'Developer', 'Tester') NOT NULL
+    role ENUM('project_manager', 'developer', 'tester') NOT NULL
 );
 
 -- Create ProjectManagers table
-CREATE TABLE ProjectManagers (
-    id INT PRIMARY KEY,
+CREATE TABLE project_managers (
+    project_manager_id INT PRIMARY KEY AUTO_INCREMENT,
+    user_id INT NOT NULL,
     max_projects INT NOT NULL DEFAULT 4,
-    FOREIGN KEY (id) REFERENCES Users(id) ON DELETE CASCADE
+    FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE
 );
 
 -- Create Projects table
-CREATE TABLE Projects (
-    id INT AUTO_INCREMENT PRIMARY KEY,
+CREATE TABLE projects (
+    project_id INT AUTO_INCREMENT PRIMARY KEY,
     project_name VARCHAR(100) NOT NULL UNIQUE,
     start_date DATE NOT NULL,
     project_manager_id INT NOT NULL,
-    status ENUM('In Progress', 'Completed') DEFAULT 'In Progress',
-    FOREIGN KEY (project_manager_id) REFERENCES ProjectManagers(id)
+    status ENUM('in_progress', 'completed') DEFAULT 'in_progress',
+    FOREIGN KEY (project_manager_id) REFERENCES project_managers(project_manager_id)
 );
 
 -- Create Developers table
-CREATE TABLE Developers (
-    id INT PRIMARY KEY,
-    project_id INT UNIQUE,
-    FOREIGN KEY (id) REFERENCES Users(id) ON DELETE CASCADE,
-    FOREIGN KEY (project_id) REFERENCES Projects(id) ON DELETE SET NULL
+CREATE TABLE developers (
+    developer_id INT PRIMARY KEY AUTO_INCREMENT,
+    user_id INT NOT NULL,
+
+    FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE
+
 );
 
 -- Create Testers table
-CREATE TABLE Testers (
-    id INT PRIMARY KEY,
-    project_id INT,
-    FOREIGN KEY (id) REFERENCES Users(id) ON DELETE CASCADE,
-    FOREIGN KEY (project_id) REFERENCES Projects(id) ON DELETE SET NULL
+CREATE TABLE testers (
+    tester_id INT PRIMARY KEY AUTO_INCREMENT,
+    user_id INT NOT NULL,
+
+    FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE
+
 );
 
 
 
--- Create Project_Team_Members table
-CREATE TABLE Project_Team_Members (
-    id INT AUTO_INCREMENT PRIMARY KEY,
+-- Create testers_projects table
+CREATE TABLE testers_projects (
     project_id INT NOT NULL,
-    user_id INT NOT NULL,
-    role ENUM('Developer', 'Tester') NOT NULL,
-    FOREIGN KEY (project_id) REFERENCES Projects(id) ON DELETE CASCADE,
-    FOREIGN KEY (user_id) REFERENCES Users(id) ON DELETE CASCADE
+    tester_id INT NOT NULL,
+    FOREIGN KEY (project_id) REFERENCES projects(project_id) ON DELETE CASCADE,
+    FOREIGN KEY (tester_id) REFERENCES testers(tester_id) ON DELETE CASCADE,
+    PRIMARY KEY (project_id, tester_id)
+);
+
+-- Crete developers_projects table
+CREATE TABLE developers_projects (
+    project_id INT NOT NULL,
+    developer_id INT NOT NULL,
+    FOREIGN KEY (project_id) REFERENCES projects(project_id) ON DELETE CASCADE,
+    FOREIGN KEY (developer_id) REFERENCES developers(developer_id) ON DELETE CASCADE,
+    PRIMARY KEY (project_id, developer_id)
 );
 
 -- Create Bugs table
-CREATE TABLE Bugs (
+CREATE TABLE bugs (
     id INT AUTO_INCREMENT PRIMARY KEY,
     project_id INT NOT NULL,
     title VARCHAR(255) NOT NULL,
     description TEXT NOT NULL,
-    severity ENUM('Low', 'Medium', 'High', 'Critical') NOT NULL,
+    severity ENUM('low', 'medium', 'high', 'critical') NOT NULL,
     created_by INT NOT NULL,
     created_on TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    assigned_to INT,
-    status ENUM('Open', 'Closed') DEFAULT 'Open',
-    FOREIGN KEY (project_id) REFERENCES Projects(id) ON DELETE CASCADE,
-    FOREIGN KEY (created_by) REFERENCES Testers(id),
-    FOREIGN KEY (assigned_to) REFERENCES Developers(id)
+    assigned_to INT DEFAULT NULL,
+    status ENUM('open', 'closed') DEFAULT 'open',
+    FOREIGN KEY (project_id) REFERENCES projects(project_id) ON DELETE CASCADE,
+    FOREIGN KEY (created_by) REFERENCES testers(tester_id),
+    FOREIGN KEY (assigned_to) REFERENCES developers(developer_id)
 );
 
--- Trigger to enforce Developer can be assigned to only one project and Tester can be assigned to only two projects
+-- Trigger to enforce Developer can be assigned to only one project
 DELIMITER $$
-CREATE TRIGGER trg_check_developer_tester_assignment
-BEFORE INSERT ON Project_Team_Members
+CREATE TRIGGER trg_check_developer_assignment
+BEFORE INSERT ON developers_projects
 FOR EACH ROW
 BEGIN
     DECLARE project_count INT;
-    IF NEW.role = 'Developer' THEN
-        SET project_count = (SELECT COUNT(*) FROM Project_Team_Members WHERE user_id = NEW.user_id AND role = 'Developer');
-        IF project_count >= 1 THEN
-            SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Developer can be assigned to only one project';
-        END IF;
-    ELSEIF NEW.role = 'Tester' THEN
-        SET project_count = (SELECT COUNT(*) FROM Project_Team_Members WHERE user_id = NEW.user_id AND role = 'Tester');
-        IF project_count >= 2 THEN
-            SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Tester can be assigned to only two projects';
-        END IF;
+    SET project_count = (SELECT COUNT(*) FROM developers_projects WHERE developer_id = NEW.developer_id);
+    IF project_count >= 1 THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Developer can be assigned to only one project';
+    END IF;
+END$$
+DELIMITER ;
+
+
+-- Trigger to enforce Tester can be assigned to maximum of two projects
+DELIMITER $$
+CREATE TRIGGER trg_check_tester_assignment
+BEFORE INSERT ON testers_projects
+FOR EACH ROW
+BEGIN
+    DECLARE project_count INT;
+    SET project_count = (SELECT COUNT(*) FROM testers_projects WHERE tester_id = NEW.tester_id);
+    IF project_count >= 2 THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Tester can be assigned to maximum of two projects';
     END IF;
 END$$
 DELIMITER ;
@@ -117,3 +136,5 @@ BEGIN
     END IF;
 END$$
 DELIMITER ;
+
+

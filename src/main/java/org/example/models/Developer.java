@@ -15,7 +15,7 @@ import java.util.List;
  * - List<String> assignedBugIds: The list of bug IDs assigned to the developer for resolution.
  */
 public class Developer extends User {
-    private String developerId;
+    private int developerId;
     private List<String> projectIds;
     private List<String> assignedBugIds;
 
@@ -29,11 +29,11 @@ public class Developer extends User {
      * @param email       The user's email address.
      * @param passwordHash The hashed password for authentication.
      * @param role        The user's role (e.g., "developer").
-     * @param lastLogin   The timestamp of the user's last login.
+
      */
-    public Developer(String developerId, int id, String name, String email,
-                     String passwordHash, String role) {
-        super(id, name, email, passwordHash, role); // Call the User class constructor
+    public Developer(int id, int developerId, String name, String email,
+                     String passwordHash) {
+        super(id, name, email, passwordHash, "developer"); // Call the User class constructor
         this.developerId = developerId;
     }
 
@@ -48,15 +48,19 @@ public class Developer extends User {
      * @param email           The user's email address.
      * @param passwordHash    The hashed password for authentication.
      * @param role            The user's role (e.g., "developer").
-     * @param lastLogin       The timestamp of the user's last login.
+
      */
-    public Developer(String developerId, List<String> projectIds, List<String> assignedBugIds,
-                     int id, String name, String email, String passwordHash,
-                     String role) {
-        super(id, name, email, passwordHash, role); // Call the User class constructor
+    public Developer(int id, int developerId, List<String> projectIds, List<String> assignedBugIds,
+                      String name, String email, String passwordHash) {
+        super(id, name, email, passwordHash, "developer"); // Call the User class constructor
         this.developerId = developerId;
         this.projectIds = projectIds;
         this.assignedBugIds = assignedBugIds;
+
+    }
+
+    public Developer(int id, String name, String email, String passwordHash) {
+        super(id, name, email, passwordHash, "developer");
 
     }
 
@@ -66,7 +70,7 @@ public class Developer extends User {
      *
      * @return The developer's ID.
      */
-    public String getDeveloperId() {
+    public int getDeveloperId() {
         return developerId;
     }
 
@@ -75,7 +79,7 @@ public class Developer extends User {
      *
      * @param developerId The developer's ID to set.
      */
-    public void setDeveloperId(String developerId) {
+    public void setDeveloperId(int developerId) {
         this.developerId = developerId;
     }
 

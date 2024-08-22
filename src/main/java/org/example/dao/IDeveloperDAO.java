@@ -1,6 +1,10 @@
 package org.example.dao;
 
+import org.example.models.Bug;
 import org.example.models.Developer;
+import org.example.models.Project;
+
+import java.util.List;
 
 /**
  * IDeveloperDAO defines the data access methods related to Developer entities.
@@ -14,8 +18,10 @@ import org.example.models.Developer;
  */
 
 public interface IDeveloperDAO {
-    public void saveDeveloper(Developer developer);
-    public Developer findDeveloperById(int developerId);
-    public Developer findDeveloperByEmail(String email);
+    public Developer saveUser(String name, String email, String password);
+    public Developer findByID(int developerId);
+    public Developer findByEmail(String email);
+    public Project getAssignedProject(int developerId);
+    public List<Bug> getAssignedBugs(int developerId);
 
 }

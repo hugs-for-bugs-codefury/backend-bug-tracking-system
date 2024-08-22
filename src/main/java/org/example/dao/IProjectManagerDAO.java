@@ -14,9 +14,9 @@ import org.example.models.ProjectManager;
  */
 
 public interface IProjectManagerDAO {
-    public void saveProjectManager(ProjectManager manager);
-    public ProjectManager findProjectManagerById(int managerId);
-    public ProjectManager findProjectManagerByEmail(String email);
+    public  ProjectManager saveUser(String name, String email, String password);
+    public ProjectManager findByID(int managerId);
+    public ProjectManager findByEmail(String email);
 
 
 }
