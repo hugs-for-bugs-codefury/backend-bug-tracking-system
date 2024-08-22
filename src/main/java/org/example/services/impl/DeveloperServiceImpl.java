@@ -31,7 +31,11 @@ public class DeveloperServiceImpl extends UserServiceImpl  implements IDeveloper
     @Override
     public Developer registerUser(String name, String email, String password) {
         DeveloperDAOImpl developerDAO = new DeveloperDAOImpl();
-        return developerDAO.saveUser(name, email, password);
+        try{
+            return developerDAO.saveUser(name, email,hashPassword(password));
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
 
     }
 
@@ -58,7 +62,7 @@ public class DeveloperServiceImpl extends UserServiceImpl  implements IDeveloper
     @Override
     public Project getAssignedProject() {
         DeveloperDAOImpl developerDAO = new DeveloperDAOImpl();
-        return developerDAO.getAssignedProject(user.getId());
+        return developerDAO.getAssignedProject(user.getDeveloperId());
 
     }
 
@@ -71,7 +75,7 @@ public class DeveloperServiceImpl extends UserServiceImpl  implements IDeveloper
     @Override
     public List<Bug> getAssignedBugs() {
         DeveloperDAOImpl developerDAO = new DeveloperDAOImpl();
-        return developerDAO.getAssignedBugs(user.getId());
+        return developerDAO.getAssignedBugs(user.getDeveloperId());
     }
 
 

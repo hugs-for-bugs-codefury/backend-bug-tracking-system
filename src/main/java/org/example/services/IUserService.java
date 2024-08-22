@@ -7,13 +7,13 @@ public interface IUserService {
 
     /**
      * Register a new user
-     * @param username
+     * @param name
      * @param email
      * @param password
      * @param role
      * @return
      */
-    User registerUser(String username, String email, String password, String role) throws Exception;
+    User registerUser(String name, String email, String password, String role) throws Exception;
 
     /**
      * Login a user

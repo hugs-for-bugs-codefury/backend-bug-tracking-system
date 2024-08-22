@@ -30,9 +30,9 @@ public class ProjectServiceImpl implements IProjectService {
     }
 
     @Override
-    public void assignTester(int projectId, int userId) {
+    public void assignTester(int projectId, int tester_id) {
         ProjectDAOImpl projectDAO = new ProjectDAOImpl();
-        projectDAO.assignTester(projectId, userId);
+        projectDAO.assignTester(projectId, tester_id);
 
 
 

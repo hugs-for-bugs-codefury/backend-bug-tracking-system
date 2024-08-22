@@ -41,27 +41,29 @@ public class Bug {
      * @param createdById The id of tester who reported the bug.
      * @param projectId The project id to which this bug is related.
      */
-    public Bug(int bugId, String title, String description, String severity, LocalDateTime createdOn, int createdById, int projectId) {
+    public Bug(int bugId, String title, String description, String severity, String status, LocalDateTime createdOn, int createdById, int projectId) {
         this.bugId = bugId;
         this.title = title;
         this.description = description;
         this.severity = severity;
+        this.status = status;
         this.createdOn = createdOn;
         this.createdById = createdById;
-        this.status = "Open"; // Default status when a bug is created
         this.projectId = projectId;
     }
 
 
-    public Bug(String title, String description, String severity, LocalDateTime createdOn, int createdById, int projectId) {
+    public Bug(String title, String description, String severity,String status, LocalDateTime createdOn, int createdById, int projectId) {
         this.title = title;
         this.description = description;
         this.severity = severity;
+        this.status = status;
         this.createdOn = createdOn;
         this.createdById = createdById;
-        this.status = "Open"; // Default status when a bug is created
         this.projectId = projectId;
+
     }
+
 
     /**
      * Gets the unique identifier for the bug.

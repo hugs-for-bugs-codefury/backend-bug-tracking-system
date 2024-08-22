@@ -52,7 +52,7 @@ public class ProjectManagerDAOImpl extends UserDAOImpl implements IProjectManage
             if (rs.next()) {
                 ProjectServiceImpl projectService = new ProjectServiceImpl();
 
-                pm = new ProjectManager(rs.getInt("id"), rs.getInt("manager_id"), rs.getString("name"), rs.getString("email"), rs.getString("password_hash"));
+                pm = new ProjectManager(rs.getInt("user_id"), rs.getInt("manager_id"), rs.getString("name"), rs.getString("email"), rs.getString("password_hash"));
 
                 pm.setProjectIds(projectService.getProjectsByManager(pm.getManagerId()).stream().map(Project::getProjectId).collect(Collectors.toList()));
 
@@ -70,7 +70,7 @@ public class ProjectManagerDAOImpl extends UserDAOImpl implements IProjectManage
 
     @Override
     public ProjectManager findByEmail(String email) {
-        String sql = "SELECT * FROM project_managers INNER JOIN users ON project_managers.user_id = users.id WHERE users.email = ?";
+        String sql = "SELECT * FROM project_managers INNER JOIN users ON project_managers.user_id = users.user_id WHERE users.email = ?";
 
         try (Connection connection = MySQLConnection.getConnection()) {
             PreparedStatement ps = connection.prepareStatement(sql);
@@ -80,7 +80,7 @@ public class ProjectManagerDAOImpl extends UserDAOImpl implements IProjectManage
             if (rs.next()) {
                 ProjectServiceImpl projectService = new ProjectServiceImpl();
 
-                pm = new ProjectManager(rs.getInt("id"), rs.getInt("manager_id"), rs.getString("name"), rs.getString("email"), rs.getString("password_hash"));
+                pm = new ProjectManager(rs.getInt("user_id"), rs.getInt("project_manager_id"), rs.getString("name"), rs.getString("email"), rs.getString("password_hash"));
 
                 pm.setProjectIds(projectService.getProjectsByManager(pm.getManagerId()).stream().map(Project::getProjectId).collect(Collectors.toList()));
 

@@ -6,7 +6,7 @@ import java.sql.SQLException;
 
 public class MySQLConnection  {
 
-    // Replace with your actual database URL, username, and password
+    // Replace with your actual database URL, name, and password
     private static final String DB_URL = Config.getProperty("db.url");
     private static final String USER = Config.getProperty("db.user");
     private static final String PASSWORD = Config.getProperty("db.password");

@@ -9,9 +9,9 @@ import java.util.List;
 
 public class BugServiceImpl implements IBugService {
     @Override
-    public Bug reportBug(String title, String description, String severity, int projectId, int createdBy) {
+    public Bug reportBug(String title, String description, String severity, int projectId, int testerId) {
         BugDAOImpl bugDAO = new BugDAOImpl();
-        Bug bug = new Bug(title, description, severity, LocalDateTime.now(), createdBy, projectId);
+        Bug bug = new Bug(title, description, severity, "open", LocalDateTime.now(), testerId, projectId);
         bug =  bugDAO.saveBug(bug);
         return bug;
 

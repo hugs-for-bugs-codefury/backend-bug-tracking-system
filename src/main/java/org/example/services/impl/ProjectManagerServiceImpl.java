@@ -24,9 +24,14 @@ public class ProjectManagerServiceImpl extends UserServiceImpl implements IProje
     }
 
     @Override
-    public ProjectManager registerUser(String username, String email, String password) {
+    public ProjectManager registerUser(String name, String email, String password) {
         ProjectManagerDAOImpl projectManagerDAO = new ProjectManagerDAOImpl();
-        return projectManagerDAO.saveUser(username, email, password);
+        try {
+            return projectManagerDAO.saveUser(name, email, hashPassword(password));
+
+        }catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
@@ -57,7 +62,7 @@ public class ProjectManagerServiceImpl extends UserServiceImpl implements IProje
             throw new IllegalArgumentException("Unauthorized access");
         }
         ProjectServiceImpl projectService = new ProjectServiceImpl();
-        projectService.assignTester(project.getProjectId(), tester.getId());
+        projectService.assignTester(project.getProjectId(), tester.getTesterId());
 
     }
 
@@ -67,7 +72,7 @@ public class ProjectManagerServiceImpl extends UserServiceImpl implements IProje
             throw new IllegalArgumentException("Unauthorized access");
         }
         BugServiceImpl bugService = new BugServiceImpl();
-        bugService.assignDeveloper(bug.getId(), developer.getId());
+        bugService.assignDeveloper(bug.getId(), developer.getDeveloperId());
 
     }
 

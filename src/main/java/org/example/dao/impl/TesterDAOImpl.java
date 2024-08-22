@@ -38,20 +38,20 @@ public class TesterDAOImpl extends UserDAOImpl implements ITesterDAO {
     }
 
     @Override
-    public Tester findByID(int id) {
+    public Tester findByID(int tester_id) {
 
-        String sql_tester = "SELECT * FROM testers INNER JOIN users ON testers.user_id = users.id WHERE testers.id = ?";
+        String sql_tester = "SELECT * FROM testers INNER JOIN users ON testers.user_id = users.user_id WHERE testers.tester_id = ?";
         BugServiceImpl bugService = new BugServiceImpl();
         ProjectServiceImpl projectService = new ProjectServiceImpl();
 
 
         try (Connection connection = MySQLConnection.getConnection()) {
             PreparedStatement ps = connection.prepareStatement(sql_tester);
-            ps.setInt(1, id);
+            ps.setInt(1, tester_id);
             ResultSet rs = ps.executeQuery();
 
             if (rs.next()) {
-                Tester t = new Tester(rs.getInt("id"), rs.getInt("tester_id"), rs.getString("name"), rs.getString("email"), rs.getString("password_hash"));
+                Tester t = new Tester(rs.getInt("user_id"), rs.getInt("tester_id"), rs.getString("name"), rs.getString("email"), rs.getString("password_hash"));
 
                 t.setProjects(projectService.getProjectsByTester(t.getTesterId()));
 
@@ -76,7 +76,7 @@ public class TesterDAOImpl extends UserDAOImpl implements ITesterDAO {
 
     @Override
     public Tester findByEmail(String email) {
-        String sql_tester = "SELECT * FROM testers INNER JOIN users ON testers.user_id = users.id WHERE users.email = ?";
+        String sql_tester = "SELECT * FROM testers INNER JOIN users ON testers.user_id = users.user_id WHERE users.email = ?";
         BugServiceImpl bugService = new BugServiceImpl();
         ProjectServiceImpl projectService = new ProjectServiceImpl();
 
@@ -88,7 +88,7 @@ public class TesterDAOImpl extends UserDAOImpl implements ITesterDAO {
             ResultSet rs = ps.executeQuery();
 
             if (rs.next()) {
-               Tester t = new Tester(rs.getInt("id"), rs.getInt("tester_id"), rs.getString("name"), rs.getString("email"), rs.getString("password_hash"));
+               Tester t = new Tester(rs.getInt("user_id"), rs.getInt("tester_id"), rs.getString("name"), rs.getString("email"), rs.getString("password_hash"));
 
                 t.setProjects(projectService.getProjectsByTester(t.getTesterId()));
 
@@ -111,7 +111,7 @@ public class TesterDAOImpl extends UserDAOImpl implements ITesterDAO {
 
     @Override
     public List<Tester> findTestersByProject(int projectId) {
-        String sql = "SELECT * FROM testers WHERE id IN (SELECT tester_id FROM testers_projects WHERE project_id = ?)";
+        String sql = "SELECT * FROM testers WHERE tester_id IN (SELECT tester_id FROM testers_projects WHERE project_id = ?)";
 
         try(Connection connection = MySQLConnection.getConnection()){
             PreparedStatement ps = connection.prepareStatement(sql);
@@ -119,7 +119,7 @@ public class TesterDAOImpl extends UserDAOImpl implements ITesterDAO {
             ResultSet rs = ps.executeQuery();
             List<Tester> testers = new ArrayList<>();
             while (rs.next()){
-                Tester t = new Tester(rs.getInt("id"), rs.getInt("tester_id"), rs.getString("name"), rs.getString("email"), rs.getString("password_hash"));
+                Tester t = new Tester(rs.getInt("user_id"), rs.getInt("tester_id"), rs.getString("name"), rs.getString("email"), rs.getString("password_hash"));
                 testers.add(t);
             }
             return testers;

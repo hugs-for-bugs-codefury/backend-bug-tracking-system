@@ -8,7 +8,7 @@ import org.example.models.Tester;
 import java.util.List;
 
 public interface IDeveloperService extends IUserService{
-    public Developer registerUser(String username, String email, String password);
+    public Developer registerUser(String name, String email, String password);
     public Developer getCurrentDeveloper();
     public Developer getDeveloper(int developerId);
     public void closeBug(int bugId);

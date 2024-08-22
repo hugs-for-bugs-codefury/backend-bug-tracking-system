@@ -18,7 +18,7 @@ public class UserDAOImpl implements IUserDAO {
             ps.setString(1, email);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
-                return new User(rs.getInt("user_id"), rs.getString("name"), rs.getString("email"), rs.getString("password"), rs.getString("role"));
+                return new User(rs.getInt("user_id"), rs.getString("name"), rs.getString("email"), rs.getString("password_hash"), rs.getString("role"));
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -34,7 +34,7 @@ public class UserDAOImpl implements IUserDAO {
             ps.setInt(1, id);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
-                return new User(rs.getInt("user_id"), rs.getString("name"), rs.getString("email"), rs.getString("password"), rs.getString("role"));
+                return new User(rs.getInt("user_id"), rs.getString("name"), rs.getString("email"), rs.getString("password_hash"), rs.getString("role"));
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);

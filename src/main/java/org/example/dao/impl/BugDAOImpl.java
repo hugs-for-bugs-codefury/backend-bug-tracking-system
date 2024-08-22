@@ -45,7 +45,7 @@ public  class BugDAOImpl implements IBugDAO {
             ResultSet rs = ps.executeQuery();
             Bug bug = null;
             if (rs.next()) {
-                bug = new Bug(rs.getInt("id"), rs.getString("title"), rs.getString("description"), rs.getString("status"), rs.getDate("created_on").toLocalDate().atTime(0,0), rs.getInt("created_by"), rs.getInt("project_id"));
+                bug = new Bug(rs.getInt("bug_id"), rs.getString("title"), rs.getString("description"), rs.getString("severity"), rs.getString("status"), rs.getDate("created_on").toLocalDate().atTime(0,0), rs.getInt("created_by"), rs.getInt("project_id"));
             }
             return bug;
         } catch (Exception e) {
@@ -63,7 +63,7 @@ public  class BugDAOImpl implements IBugDAO {
             ResultSet rs = ps.executeQuery();
             List<Bug> bugs =  new ArrayList<>();
             while (rs.next()) {
-                Bug bug = new Bug(rs.getInt("id"), rs.getString("title"), rs.getString("description"), rs.getString("status"), rs.getDate("created_on").toLocalDate().atTime(0,0), rs.getInt("created_by"), rs.getInt("project_id"));
+                Bug bug = new Bug(rs.getInt("bug_id"), rs.getString("title"), rs.getString("description"), rs.getString("severity"), rs.getString("status"), rs.getDate("created_on").toLocalDate().atTime(0,0), rs.getInt("created_by"), rs.getInt("project_id"));
                 bugs.add(bug);
             }
             return bugs;
@@ -82,7 +82,7 @@ public  class BugDAOImpl implements IBugDAO {
             ResultSet rs = ps.executeQuery();
             List<Bug> bugs =  new ArrayList<>();
             while (rs.next()) {
-                Bug bug = new Bug(rs.getInt("id"), rs.getString("title"), rs.getString("description"), rs.getString("status"), rs.getDate("created_on").toLocalDate().atTime(0,0), rs.getInt("created_by"), rs.getInt("project_id"));
+                Bug bug = new Bug(rs.getInt("bug_id"), rs.getString("title"), rs.getString("description"), rs.getString("severity"), rs.getString("status"), rs.getDate("created_on").toLocalDate().atTime(0,0), rs.getInt("created_by"), rs.getInt("project_id"));
                 bugs.add(bug);
             }
             return bugs;

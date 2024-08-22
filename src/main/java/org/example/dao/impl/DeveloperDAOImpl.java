@@ -5,9 +5,9 @@ import org.example.models.Bug;
 import org.example.models.Developer;
 import org.example.models.Project;
 import org.example.models.User;
-import org.example.services.impl.BugServiceImpl;
+
 import org.example.services.impl.ProjectServiceImpl;
-import org.example.services.impl.TesterServiceImpl;
+
 import org.example.util.MySQLConnection;
 
 import java.sql.Connection;
@@ -57,7 +57,7 @@ public  class DeveloperDAOImpl extends UserDAOImpl implements IDeveloperDAO {
 
                 ProjectServiceImpl projectService = new ProjectServiceImpl();
 
-                project = new Project(rs.getInt("id"), rs.getString("name"), rs.getDate("created_on").toLocalDate().atTime(0,0), rs.getString("status"),  rs.getInt("created_by"), null, null, null);
+                project = new Project(rs.getInt("project_name"), rs.getString("name"), rs.getDate("created_on").toLocalDate().atTime(0,0), rs.getString("status"),  rs.getInt("created_by"), null, null, null);
 
 
                 project.setTesters(projectService.getAssignedTesters(project.getProjectId()).stream().map(User::getId).collect(Collectors.toList()));
@@ -72,14 +72,16 @@ public  class DeveloperDAOImpl extends UserDAOImpl implements IDeveloperDAO {
 
     @Override
     public List<Bug> getAssignedBugs(int developerId) {
+
         String sql = "SELECT * FROM bugs WHERE assigned_to = ?";
+
         try (Connection connection = MySQLConnection.getConnection()) {
             PreparedStatement ps = connection.prepareStatement(sql);
             ps.setInt(1, developerId);
             ResultSet rs = ps.executeQuery();
             List<Bug> bugs =  new ArrayList<>();
             while (rs.next()) {
-                Bug bug = new Bug(rs.getInt("bug_id"), rs.getString("title"), rs.getString("description"), rs.getString("status"), rs.getDate("created_on").toLocalDate().atTime(0,0), rs.getInt("created_by"), rs.getInt("project_id"));
+                Bug bug = new Bug(rs.getInt("bug_id"), rs.getString("title"), rs.getString("description"),rs.getString("severity"), rs.getString("status"), rs.getDate("created_on").toLocalDate().atTime(0,0), rs.getInt("created_by"), rs.getInt("project_id"));
                 bugs.add(bug);
             }
             return bugs;
@@ -90,7 +92,7 @@ public  class DeveloperDAOImpl extends UserDAOImpl implements IDeveloperDAO {
 
     @Override
     public Developer findByID(int user_id) {
-        String sql = "SELECT * FROM developers INNER JOIN users ON developers.user_id = users.user_id WHERE developers.user_id = ?";
+        String sql = "SELECT * FROM developers INNER JOIN users ON developers.user_id = users.user_id WHERE developers.developer_id = ?";
         try (Connection connection = MySQLConnection.getConnection()) {
             PreparedStatement ps = connection.prepareStatement(sql);
             ps.setInt(1, user_id);

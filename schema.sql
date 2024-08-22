@@ -13,7 +13,7 @@ DROP TABLE IF EXISTS users;
 -- Create Users table
 CREATE TABLE users (
     user_id INT AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(50) NOT NULL UNIQUE,
+    name VARCHAR(50) NOT NULL,
     email VARCHAR(100) NOT NULL UNIQUE,
     password_hash VARCHAR(255) NOT NULL,
     last_login TIMESTAMP NULL,
@@ -31,7 +31,7 @@ CREATE TABLE project_managers (
 -- Create Projects table
 CREATE TABLE projects (
     project_id INT AUTO_INCREMENT PRIMARY KEY,
-    project_name VARCHAR(100) NOT NULL UNIQUE,
+    project_name VARCHAR(100) NOT NULL,
     start_date DATE NOT NULL,
     project_manager_id INT NOT NULL,
     status ENUM('in_progress', 'completed') DEFAULT 'in_progress',
@@ -78,7 +78,7 @@ CREATE TABLE developers_projects (
 
 -- Create Bugs table
 CREATE TABLE bugs (
-    id INT AUTO_INCREMENT PRIMARY KEY,
+    bug_id INT AUTO_INCREMENT PRIMARY KEY,
     project_id INT NOT NULL,
     title VARCHAR(255) NOT NULL,
     description TEXT NOT NULL,

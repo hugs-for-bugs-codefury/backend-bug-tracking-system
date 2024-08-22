@@ -40,14 +40,23 @@ public class UserServiceImpl  implements IUserService {
 
     @Override
     public void login(String email, String password) {
+        String hashedPassword = null;
+        try {
+            hashedPassword = hashPassword(password);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
         UserDAOImpl userDAO = new UserDAOImpl();
         User user = userDAO.findByEmail(email);
         if(user == null) {
             throw new IllegalArgumentException("User not found");
         }
-        if(!user.getPasswordHash().equals(password)) {
+        if(!user.getPasswordHash().equals(hashedPassword)) {
             throw new IllegalArgumentException("Invalid password");
         }
+
+
+
         this.user = user;
     }
 
@@ -76,7 +85,7 @@ public class UserServiceImpl  implements IUserService {
 
 
 
-    private static String hashPassword(String password) throws Exception {
+    protected static String hashPassword(String password) throws Exception {
         MessageDigest digest = MessageDigest.getInstance("SHA-256");
         byte[] hashBytes = digest.digest(password.getBytes(StandardCharsets.UTF_8));
 

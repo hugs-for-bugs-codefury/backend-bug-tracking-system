@@ -28,9 +28,13 @@ public class TesterServiceImpl extends UserServiceImpl implements ITesterService
     }
 
     @Override
-    public Tester registerUser(String username, String email, String password) {
+    public Tester registerUser(String name, String email, String password) {
         TesterDAOImpl testerDAO = new TesterDAOImpl();
-        return testerDAO.saveUser(username, email, password);
+        try {
+            return testerDAO.saveUser(name, email, hashPassword(password));
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
@@ -39,16 +43,16 @@ public class TesterServiceImpl extends UserServiceImpl implements ITesterService
     }
 
     @Override
-    public Tester getTester(int testerId) {
+    public Tester getTester(int tester_id) {
         TesterDAOImpl testerDAO = new TesterDAOImpl();
-        return testerDAO.findByID(testerId);
+        return testerDAO.findByID(tester_id);
     }
 
 
     @Override
     public Bug reportBug(Project project, String title, String description, String severity) {
         BugServiceImpl bugService = new BugServiceImpl();
-        return bugService.reportBug(title, description, severity, project.getProjectId(), user.getId());
+        return bugService.reportBug(title, description, severity, project.getProjectId(), user.getTesterId());
 
     }
 

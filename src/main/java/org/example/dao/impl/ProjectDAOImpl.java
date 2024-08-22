@@ -48,7 +48,7 @@ public class ProjectDAOImpl  implements IProjectDAO {
             ResultSet rs = ps.executeQuery();
 
             if (rs.next()) {
-                Project project = new Project(rs.getInt("project_id"), rs.getString("name"), rs.getDate("start_date").toLocalDate().atTime(0,0), rs.getString("status"), rs.getInt("project_manager_id"), new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
+                Project project = new Project(rs.getInt("project_id"), rs.getString("project_name"), rs.getDate("start_date").toLocalDate().atTime(0,0), rs.getString("status"), rs.getInt("project_manager_id"), new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
 
                 project.setDevelopers(this.getAssignedDevelopers(projectId).stream().map(User::getId).collect(Collectors.toList()));
                 project.setTesters(this.getAssignedTesters(projectId).stream().map(User::getId).collect(Collectors.toList()));
@@ -92,7 +92,7 @@ public class ProjectDAOImpl  implements IProjectDAO {
             ps.setInt(1, testerId);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-                Project project = new Project(rs.getInt("project_id"), rs.getString("name"), rs.getDate("start_date").toLocalDate().atTime(0,0), rs.getString("status"), rs.getInt("project_manager_id"), new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
+                Project project = new Project(rs.getInt("project_id"), rs.getString("project_name"), rs.getDate("start_date").toLocalDate().atTime(0,0), rs.getString("status"), rs.getInt("project_manager_id"), new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
                 project.setDevelopers(this.getAssignedDevelopers(project.getProjectId()).stream().map(User::getId).collect(Collectors.toList()));
                 project.setTesters(this.getAssignedTesters(project.getProjectId()).stream().map(User::getId).collect(Collectors.toList()));
                 project.setBugs(this.getProjectBugs(project.getProjectId()));
@@ -113,7 +113,7 @@ public class ProjectDAOImpl  implements IProjectDAO {
             ResultSet rs = ps.executeQuery();
 
             if (rs.next()) {
-                Project project = new Project(rs.getInt("project_id"), rs.getString("name"), rs.getDate("start_date").toLocalDate().atTime(0,0), rs.getString("status"), rs.getInt("project_manager_id"), new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
+                Project project = new Project(rs.getInt("project_id"), rs.getString("project_name"), rs.getDate("start_date").toLocalDate().atTime(0,0), rs.getString("status"), rs.getInt("project_manager_id"), new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
                 project.setDevelopers(this.getAssignedDevelopers(project.getProjectId()).stream().map(User::getId).collect(Collectors.toList()));
                 project.setTesters(this.getAssignedTesters(project.getProjectId()).stream().map(User::getId).collect(Collectors.toList()));
                 project.setBugs(this.getProjectBugs(project.getProjectId()));
@@ -127,11 +127,11 @@ public class ProjectDAOImpl  implements IProjectDAO {
 
     @Override
     public Project assignTester(int projectId, int testerId) {
-        String sql = "INSERT INTO testers_projects (tester_id, project_id) VALUES (?, ?)";
+        String sql = "INSERT INTO testers_projects (project_id, tester_id) VALUES (?, ?)";
         try (Connection connection = MySQLConnection.getConnection()) {
             PreparedStatement ps = connection.prepareStatement(sql);
-            ps.setInt(1, testerId);
-            ps.setInt(2, projectId);
+            ps.setInt(1, projectId);
+            ps.setInt(2, testerId);
             ps.executeUpdate();
             return findByID(projectId);
         } catch (Exception e) {
@@ -155,14 +155,14 @@ public class ProjectDAOImpl  implements IProjectDAO {
 
     @Override
     public List<Developer> getAssignedDevelopers(int projectId) {
-        String sql  = "SELECT * FROM developers WHERE id IN (SELECT developer_id FROM developers_projects WHERE project_id = ?)";
+        String sql  = "SELECT * FROM developers INNER JOIN users ON developers.user_id = users.user_id WHERE developers.user_id IN (SELECT developer_id FROM developers_projects WHERE project_id = ?)";
         List<Developer> developers = new ArrayList<>();
         try (Connection connection = MySQLConnection.getConnection()) {
             PreparedStatement ps = connection.prepareStatement(sql);
             ps.setInt(1, projectId);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-                Developer developer = new Developer(rs.getInt("id"), rs.getInt("developer_id"), rs.getString("name"), rs.getString("email"), rs.getString("password_hash"));
+                Developer developer = new Developer(rs.getInt("user_id"), rs.getInt("developer_id"), rs.getString("name"), rs.getString("email"), rs.getString("password_hash"));
                 developers.add(developer);
             }
             return developers;
@@ -173,14 +173,14 @@ public class ProjectDAOImpl  implements IProjectDAO {
 
     @Override
     public List<Tester> getAssignedTesters(int projectId) {
-        String sql  = "SELECT * FROM testers WHERE id IN (SELECT tester_id FROM testers_projects WHERE project_id = ?)";
+        String sql  = "SELECT * FROM testers INNER JOIN users ON testers.user_id = users.user_id WHERE tester_id IN (SELECT tester_id FROM testers_projects WHERE project_id = ?)";
         List<Tester> testers = new ArrayList<>();
         try (Connection connection = MySQLConnection.getConnection()) {
             PreparedStatement ps = connection.prepareStatement(sql);
             ps.setInt(1, projectId);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-                Tester tester = new Tester(rs.getInt("id"), rs.getInt("tester_id"), rs.getString("name"), rs.getString("email"), rs.getString("password_hash"));
+                Tester tester = new Tester(rs.getInt("user_id"), rs.getInt("tester_id"), rs.getString("name"), rs.getString("email"), rs.getString("password_hash"));
                 testers.add(tester);
             }
             return testers;
@@ -198,7 +198,7 @@ public class ProjectDAOImpl  implements IProjectDAO {
             ps.setInt(1, projectId);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-                Bug bug = new Bug(rs.getInt("id"), rs.getString("title"), rs.getString("description"), rs.getString("status"), rs.getDate("created_on").toLocalDate().atTime(0,0), rs.getInt("created_by"), rs.getInt("project_id"));
+                Bug bug = new Bug(rs.getInt("bug_id"), rs.getString("title"), rs.getString("description"), rs.getString("severity"), rs.getString("status"), rs.getDate("created_on").toLocalDate().atTime(0,0), rs.getInt("created_by"), rs.getInt("project_id"));
                 bugs.add(bug);
             }
             return bugs;
