@@ -1,6 +1,7 @@
 package org.example.dao.impl;
 
 import org.example.dao.IProjectManagerDAO;
+import org.example.exceptions.users.UserNotFoundException;
 import org.example.models.Project;
 import org.example.models.ProjectManager;
 import org.example.models.Tester;
@@ -12,35 +13,32 @@ import org.example.util.MySQLConnection;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.stream.Collectors;
 
 public class ProjectManagerDAOImpl extends UserDAOImpl implements IProjectManagerDAO {
     @Override
-    public ProjectManager saveUser(String name, String email, String password) {
+    public ProjectManager saveUser(String name, String email, String password) throws SQLException {
         User savedUser = super.saveUser(name, email, password, "project_manager");
 
         String sql = "INSERT INTO project_managers (user_id) VALUES (?)";
-        try {
-            Connection connection = MySQLConnection.getConnection();
+        try (Connection connection = MySQLConnection.getConnection()) {
+
 
             PreparedStatement ps = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
             ps.setInt(1, savedUser.getId());
             ps.executeUpdate();
             ResultSet rs = ps.getGeneratedKeys();
-            if (rs.next()) {
-                int id = rs.getInt(1);
-                return new ProjectManager(savedUser.getId(), id, savedUser.getName(), savedUser.getEmail(), savedUser.getPasswordHash());
-            }
-        } catch (Exception e) {
+            rs.next();
 
-            throw new RuntimeException(e);
+            int id = rs.getInt(1);
+            return new ProjectManager(savedUser.getId(), id, savedUser.getName(), savedUser.getEmail(), savedUser.getPasswordHash());
 
         }
-        throw new RuntimeException("Project Manager not saved");
     }
 
     @Override
-    public ProjectManager findByID(int id) {
+    public ProjectManager findByID(int id) throws SQLException, UserNotFoundException {
         String sql = "SELECT * FROM project_managers INNER JOIN users ON project_managers.user_id = users.id WHERE project_managers.id = ?";
 
 
@@ -59,17 +57,12 @@ public class ProjectManagerDAOImpl extends UserDAOImpl implements IProjectManage
                 return pm;
 
             }
-
-
-        } catch (Exception e) {
-            throw new RuntimeException(e);
+            throw new UserNotFoundException("Project Manager with id " + id + " not found.");
         }
-
-        throw new RuntimeException("Tester not found");
     }
 
     @Override
-    public ProjectManager findByEmail(String email) {
+    public ProjectManager findByEmail(String email) throws SQLException, UserNotFoundException {
         String sql = "SELECT * FROM project_managers INNER JOIN users ON project_managers.user_id = users.user_id WHERE users.email = ?";
 
         try (Connection connection = MySQLConnection.getConnection()) {
@@ -87,13 +80,7 @@ public class ProjectManagerDAOImpl extends UserDAOImpl implements IProjectManage
                 return pm;
 
             }
-
-
-        } catch (Exception e) {
-            throw new RuntimeException(e);
+            throw new UserNotFoundException("Project Manager with email " + email + " not found.");
         }
-
-        throw new RuntimeException("Tester not found");
-
     }
 }

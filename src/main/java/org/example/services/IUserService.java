@@ -13,7 +13,7 @@ public interface IUserService {
      * @param role
      * @return
      */
-    User registerUser(String name, String email, String password, String role) throws Exception;
+    User registerUser(String name, String email, String password, String role) ;
 
 
 
@@ -22,7 +22,7 @@ public interface IUserService {
      * @param userId
      * @return
      */
-    User getUser(int userId) throws Exception;
+    User getUser(int userId) ;
 
 
     /**
@@ -30,6 +30,6 @@ public interface IUserService {
      * @param projectId
      * @return
      */
-    Project getProject(int projectId) throws Exception;
+    Project getProject(int projectId) ;
 
 }

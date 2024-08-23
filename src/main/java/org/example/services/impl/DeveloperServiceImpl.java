@@ -2,23 +2,27 @@ package org.example.services.impl;
 
 import org.example.dao.impl.DeveloperDAOImpl;
 import org.example.dao.impl.ProjectManagerDAOImpl;
+import org.example.exceptions.users.UserNotAuthorizedException;
+import org.example.exceptions.users.UserNotFoundException;
 import org.example.models.Bug;
 import org.example.models.Developer;
 import org.example.models.Project;
 import org.example.models.User;
 import org.example.services.IDeveloperService;
+import org.example.util.Algorithms;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class DeveloperServiceImpl extends UserServiceImpl  implements IDeveloperService {
     Developer user;
 
-    public DeveloperServiceImpl(User user) {
+    public DeveloperServiceImpl(User user) throws UserNotAuthorizedException {
         super(user);
 
         if(!user.getRole().equals("developer")) {
-            throw new IllegalArgumentException("User is not a developer");
+            throw new UserNotAuthorizedException("User is not a developer");
         }
         this.user = (Developer) user;
     }
@@ -32,7 +36,7 @@ public class DeveloperServiceImpl extends UserServiceImpl  implements IDeveloper
     public Developer registerUser(String name, String email, String password) {
         DeveloperDAOImpl developerDAO = new DeveloperDAOImpl();
         try{
-            return developerDAO.saveUser(name, email,hashPassword(password));
+            return developerDAO.saveUser(name, email, Algorithms.hashPassword(password));
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -46,8 +50,15 @@ public class DeveloperServiceImpl extends UserServiceImpl  implements IDeveloper
 
     @Override
     public Developer getDeveloper(int developerId) {
-        DeveloperDAOImpl developerDAO = new DeveloperDAOImpl();
-        return developerDAO.findByID(developerId);
+        try {
+
+            DeveloperDAOImpl developerDAO = new DeveloperDAOImpl();
+            return developerDAO.findByID(developerId);
+        }catch (UserNotFoundException | SQLException e) {
+            throw new RuntimeException(e.getMessage());
+
+        }
+
     }
 
     @Override
@@ -60,16 +71,26 @@ public class DeveloperServiceImpl extends UserServiceImpl  implements IDeveloper
     }
 
     @Override
-    public Project getAssignedProject() {
+    public List<Project> getAssignedProjects() {
         DeveloperDAOImpl developerDAO = new DeveloperDAOImpl();
-        return developerDAO.getAssignedProject(user.getDeveloperId());
+        try {
+            return developerDAO.getAssignedProjects(user.getDeveloperId());
+
+        }catch (SQLException e) {
+            throw new RuntimeException(e.getMessage());
+        }
 
     }
 
     @Override
-    public Project getAssignedProject(int developerId) {
+    public List<Project> getAssignedProjects(int developerId) {
         DeveloperDAOImpl developerDAO = new DeveloperDAOImpl();
-        return developerDAO.getAssignedProject(developerId);
+        try {
+            return developerDAO.getAssignedProjects(developerId);
+
+        }catch (SQLException e) {
+            throw new RuntimeException(e.getMessage());
+        }
     }
 
     @Override

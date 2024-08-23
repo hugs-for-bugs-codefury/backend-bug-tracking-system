@@ -1,11 +1,15 @@
 package org.example.dao;
 
 
+import org.example.exceptions.projects.MaxProjectsException;
+import org.example.exceptions.projects.ProjectNotFoundException;
+import org.example.exceptions.users.UserNotFoundException;
 import org.example.models.Bug;
 import org.example.models.Developer;
 import org.example.models.Project;
 import org.example.models.Tester;
 
+import java.sql.SQLException;
 import java.util.Date;
 import java.util.List;
 
@@ -22,16 +26,16 @@ import java.util.List;
 
 public interface IProjectDAO {
 
-    public Project saveProject(Project project);
-    public Project findByID(int projectId);
-    public List<Project> findProjectsByManager(int managerId);
-    public List<Project> findProjectsByTester(int testerId);
-    public Project findProjectByDeveloper(int developerId);
-    public Project assignTester(int projectId, int testerId);
-    public Project assignDeveloper(int projectId, int developerId);
-    public List<Developer> getAssignedDevelopers(int projectId);
-    public List<Tester> getAssignedTesters(int projectId);
-    public List<Bug> getProjectBugs(int projectId);
+    public Project saveProject(Project project) throws SQLException, MaxProjectsException;
+    public Project findByID(int projectId) throws SQLException, ProjectNotFoundException;
+    public List<Project> findProjectsByManager(int managerId) throws SQLException;
+    public List<Project> findProjectsByTester(int testerId) throws SQLException;
+    public List<Project> findProjectsByDeveloper(int developerId) throws SQLException;
+    public Project assignTester(int projectId, int testerId) throws SQLException, MaxProjectsException;
+    public Project assignDeveloper(int projectId, int developerId) throws SQLException, MaxProjectsException;
+    public List<Developer> getAssignedDevelopers(int projectId) throws SQLException;
+    public List<Tester> getAssignedTesters(int projectId) throws SQLException;
+    public List<Bug> getProjectBugs(int projectId) throws SQLException;
 
 
 }

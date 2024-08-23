@@ -8,31 +8,42 @@ import org.example.models.Tester;
 import org.example.services.IProjectService;
 
 import java.time.LocalDateTime;
-import java.util.Date;
+
 import java.util.List;
 
 public class ProjectServiceImpl implements IProjectService {
     @Override
     public Project createProject(String name, LocalDateTime startDate, int projectManagerId) {
         ProjectDAOImpl projectDAO = new ProjectDAOImpl();
-        return projectDAO.saveProject(new Project(name, startDate, "in_progress", projectManagerId));
+        try {
+            return projectDAO.saveProject(new Project(name, startDate, "in_progress", projectManagerId));
+        }catch (Exception e) {
+            throw new RuntimeException(e.getMessage());
+        }
 
     }
 
     @Override
-    public void assignDeveloper(int projectId, int userId) {
+    public void assignDeveloper(int projectId, int developerId) {
         ProjectDAOImpl projectDAO = new ProjectDAOImpl();
-        projectDAO.assignDeveloper(projectId, userId);
-
-
-
+        try {
+            projectDAO.assignDeveloper(projectId, developerId);
+        }
+        catch (Exception e) {
+            throw new RuntimeException(e.getMessage());
+        }
 
     }
 
     @Override
     public void assignTester(int projectId, int tester_id) {
         ProjectDAOImpl projectDAO = new ProjectDAOImpl();
-        projectDAO.assignTester(projectId, tester_id);
+        try {
+            projectDAO.assignTester(projectId, tester_id);
+        }
+        catch (Exception e) {
+            throw new RuntimeException(e.getMessage());
+        }
 
 
 
@@ -41,45 +52,82 @@ public class ProjectServiceImpl implements IProjectService {
     @Override
     public Project getProject(int projectId) {
         ProjectDAOImpl projectDAO = new ProjectDAOImpl();
-        return projectDAO.findByID(projectId);
+        try {
+            return projectDAO.findByID(projectId);
+        }catch (Exception e) {
+            throw new RuntimeException(e.getMessage());
+        }
 
     }
 
     @Override
     public List<Project> getProjectsByTester(int testerId) {
         ProjectDAOImpl projectDAO = new ProjectDAOImpl();
-        return projectDAO.findProjectsByTester(testerId);
+        try {
+            return projectDAO.findProjectsByTester(testerId);
+        }
+        catch (Exception e) {
+            throw new RuntimeException(e.getMessage());
+        }
 
     }
 
     @Override
     public List<Project> getProjectsByManager(int managerId) {
         ProjectDAOImpl projectDAO = new ProjectDAOImpl();
-        return projectDAO.findProjectsByManager(managerId);
+        try {
+            return projectDAO.findProjectsByManager(managerId);
+
+        }catch (Exception e) {
+            throw new RuntimeException(e.getMessage());
+        }
     }
 
     @Override
-    public Project getProjectByDeveloper(int developerId) {
+    public List<Project> getProjectByDeveloper(int developerId) {
         ProjectDAOImpl projectDAO = new ProjectDAOImpl();
-        return projectDAO.findProjectByDeveloper(developerId);
+        try {
+            return projectDAO.findProjectsByDeveloper(developerId);
+        }
+        catch (Exception e) {
+            throw new RuntimeException(e.getMessage());
+        }
     }
 
     @Override
     public List<Developer> getAssignedDevelopers(int projectId) {
         ProjectDAOImpl projectDAO = new ProjectDAOImpl();
-        return projectDAO.getAssignedDevelopers(projectId);
+        try {
+            return projectDAO.getAssignedDevelopers(projectId);
+        }
+        catch (Exception e) {
+            throw new RuntimeException(e.getMessage());
+        }
+
     }
 
     @Override
     public List<Tester> getAssignedTesters(int projectId) {
         ProjectDAOImpl projectDAO = new ProjectDAOImpl();
-        return projectDAO.getAssignedTesters(projectId);
+        try {
+            return projectDAO.getAssignedTesters(projectId);
+        }
+        catch (Exception e) {
+            throw new RuntimeException(e.getMessage());
+        }
+
     }
 
     @Override
     public List<Bug> getProjectBugs(int projectId) {
         ProjectDAOImpl projectDAO = new ProjectDAOImpl();
-        return projectDAO.getProjectBugs(projectId);
+        try {
+            return projectDAO.getProjectBugs(projectId);
+        }
+        catch (Exception e) {
+            throw new RuntimeException(e.getMessage());
+        }
+
     }
 
 

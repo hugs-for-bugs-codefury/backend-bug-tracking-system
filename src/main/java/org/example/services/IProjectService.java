@@ -54,7 +54,7 @@ public interface IProjectService {
     public List<Project> getProjectsByManager(int managerId);
 
 
-    public  Project getProjectByDeveloper(int developerId);
+    public  List<Project> getProjectByDeveloper(int developerId);
 
     public List<Developer> getAssignedDevelopers(int projectId);
     public List<Tester> getAssignedTesters(int projectId);

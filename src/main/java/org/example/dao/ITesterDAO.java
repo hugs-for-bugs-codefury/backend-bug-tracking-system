@@ -1,9 +1,11 @@
 package org.example.dao;
 
 
+import org.example.exceptions.users.UserNotFoundException;
 import org.example.models.Bug;
 import org.example.models.Tester;
 
+import java.sql.SQLException;
 import java.util.List;
 
 /**
@@ -19,9 +21,9 @@ import java.util.List;
 
 public interface ITesterDAO extends IUserDAO {
 
-        public Tester saveUser(String name, String email, String password);
-        public Tester findByID(int testerId);
-        public Tester findByEmail(String email);
-        public List<Tester> findTestersByProject(int projectId);
+        public Tester saveUser(String name, String email, String password) throws SQLException;
+        public Tester findByID(int testerId) throws UserNotFoundException, SQLException;
+        public Tester findByEmail(String email) throws UserNotFoundException, SQLException;
+        public List<Tester> findTestersByProject(int projectId) throws SQLException;
 
 }

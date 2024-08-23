@@ -15,8 +15,8 @@ import java.util.List;
  */
 public class Developer extends User {
     private int developerId;
-    private List<String> projectIds;
-    private List<String> assignedBugIds;
+    private List<Integer> projectIds;
+    private List<Integer> assignedBugIds;
 
 
     /**
@@ -47,7 +47,7 @@ public class Developer extends User {
      * @param passwordHash   The hashed password for authentication.
      * @param role           The user's role (e.g., "developer").
      */
-    public Developer(int id, int developerId, List<String> projectIds, List<String> assignedBugIds,
+    public Developer(int id, int developerId, List<Integer> projectIds, List<Integer> assignedBugIds,
                      String name, String email, String passwordHash) {
         super(id, name, email, passwordHash, "developer"); // Call the User class constructor
         this.developerId = developerId;
@@ -85,7 +85,7 @@ public class Developer extends User {
      *
      * @return The list of project IDs.
      */
-    public List<String> getProjectIds() {
+    public List<Integer> getProjectIds() {
         return projectIds;
     }
 
@@ -94,7 +94,7 @@ public class Developer extends User {
      *
      * @param projectIds The list of project IDs to assign to the developer.
      */
-    public void setProjectIds(List<String> projectIds) {
+    public void setProjectIds(List<Integer> projectIds) {
         this.projectIds = projectIds;
     }
 
@@ -103,7 +103,7 @@ public class Developer extends User {
      *
      * @return The list of assigned bug IDs.
      */
-    public List<String> getAssignedBugIds() {
+    public List<Integer> getAssignedBugIds() {
         return assignedBugIds;
     }
 
@@ -112,7 +112,7 @@ public class Developer extends User {
      *
      * @param assignedBugIds The new list of assigned bug IDs.
      */
-    public void setAssignedBugIds(List<String> assignedBugIds) {
+    public void setAssignedBugIds(List<Integer> assignedBugIds) {
         this.assignedBugIds = assignedBugIds;
     }
 

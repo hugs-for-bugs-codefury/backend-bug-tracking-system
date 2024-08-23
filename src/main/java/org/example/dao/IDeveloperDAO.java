@@ -1,9 +1,11 @@
 package org.example.dao;
 
+import org.example.exceptions.users.UserNotFoundException;
 import org.example.models.Bug;
 import org.example.models.Developer;
 import org.example.models.Project;
 
+import java.sql.SQLException;
 import java.util.List;
 
 /**
@@ -18,10 +20,10 @@ import java.util.List;
  */
 
 public interface IDeveloperDAO {
-    public Developer saveUser(String name, String email, String password);
-    public Developer findByID(int developerId);
-    public Developer findByEmail(String email);
-    public Project getAssignedProject(int developerId);
-    public List<Bug> getAssignedBugs(int developerId);
+    public Developer saveUser(String name, String email, String password) throws SQLException;
+    public Developer findByID(int developerId) throws UserNotFoundException, SQLException;
+    public Developer findByEmail(String email) throws UserNotFoundException, SQLException;
+    public List<Project>  getAssignedProjects(int developerId) throws SQLException;
+    public List<Bug> getAssignedBugs(int developerId) throws SQLException;
 
 }

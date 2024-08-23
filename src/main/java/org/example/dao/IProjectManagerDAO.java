@@ -1,6 +1,9 @@
 package org.example.dao;
 
+import org.example.exceptions.users.UserNotFoundException;
 import org.example.models.ProjectManager;
+
+import java.sql.SQLException;
 
 /**
  * IProjectManagerDAO defines the data access methods related to ProjectManager entities.
@@ -14,9 +17,9 @@ import org.example.models.ProjectManager;
  */
 
 public interface IProjectManagerDAO {
-    public  ProjectManager saveUser(String name, String email, String password);
-    public ProjectManager findByID(int managerId);
-    public ProjectManager findByEmail(String email);
+    public  ProjectManager saveUser(String name, String email, String password) throws SQLException;
+    public ProjectManager findByID(int managerId) throws SQLException, UserNotFoundException;
+    public ProjectManager findByEmail(String email) throws SQLException, UserNotFoundException;
 
 
 }

@@ -1,7 +1,10 @@
 package org.example.dao;
 
+import org.example.exceptions.bugs.BugNotAssignableException;
+import org.example.exceptions.bugs.BugNotFoundException;
 import org.example.models.Bug;
 
+import java.sql.SQLException;
 import java.util.List;
 
 /**
@@ -17,13 +20,12 @@ import java.util.List;
 
 public interface IBugDAO {
 
-    public Bug saveBug(Bug bug);
-    public Bug findBugById(int bugId);
-    public List<Bug> findBugsByProject(int projectId);
-    public List<Bug> findBugsByTester(int testerId);
-    public void deleteBugById(int bugId);
-    public Bug assignTester(int bugId, int testerId);
-    public Bug assignDeveloper(int bugId, int developerId);
-    public Bug closeBug(int bugId);
+    public Bug saveBug(Bug bug) throws SQLException;
+    public Bug findBugById(int bugId) throws SQLException, BugNotFoundException;
+    public List<Bug> findBugsByProject(int projectId) throws SQLException;
+    public List<Bug> findBugsByTester(int testerId) throws SQLException;
+    public void deleteBugById(int bugId) throws SQLException;
+    public Bug assignDeveloper(int bugId, int developerId) throws SQLException, BugNotAssignableException;
+    public Bug closeBug(int bugId) throws SQLException;
 
 }

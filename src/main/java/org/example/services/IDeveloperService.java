@@ -10,7 +10,7 @@ public interface IDeveloperService extends IUserService{
     public Developer getCurrentDeveloper();
     public Developer getDeveloper(int developerId);
     public void closeBug(int bugId);
-    public Project getAssignedProject();
-    public Project getAssignedProject(int developerId);
+    public List<Project> getAssignedProjects();
+    public List<Project> getAssignedProjects(int developerId);
     public List<Bug> getAssignedBugs();
 }
