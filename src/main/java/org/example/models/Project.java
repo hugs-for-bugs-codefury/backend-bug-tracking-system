@@ -189,6 +189,18 @@ public class Project {
     public void setBugs(List<Bug> bugs) {
         this.bugs = bugs;
     }
+
+
+    @Override
+    public String toString() {
+        return "Project{" +
+                "projectManagerId=" + projectManagerId +
+                ", status='" + status + '\'' +
+                ", startDate=" + startDate +
+                ", projectName='" + projectName + '\'' +
+                ", projectId=" + projectId +
+                '}';
+    }
 }
 
 

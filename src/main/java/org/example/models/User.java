@@ -6,9 +6,9 @@ import java.time.LocalDateTime;
 /**
  * The abstract User class represents a general user in the bug-tracking system.
  * This class serves as the base for different types of users, such as Project Managers, Developers, and Testers.
- *
+ * <p>
  * The User class provides common properties and methods shared by all user types.
- *
+ * <p>
  * Example properties include:
  * - int id: The unique identifier for the user.
  * - String name: The name of the user.
@@ -16,7 +16,7 @@ import java.time.LocalDateTime;
  * - String password: The encrypted password for user authentication.
  * - String role: The role of the user (e.g., "ProjectManager", "Developer", "Tester").
  * - LocalDateTime lastLogin: The timestamp of the user's last login.
- *
+ * <p>
  * Subclasses should implement specific behaviors and attributes for different types of users.
  */
 public class User {
@@ -51,6 +51,7 @@ public class User {
 
     /**
      * Gets the unique identifier of the user.
+     *
      * @return The user's ID.
      */
     public int getId() {
@@ -59,6 +60,7 @@ public class User {
 
     /**
      * Sets the unique identifier of the user.
+     *
      * @param id The user's ID.
      */
     public void setId(int id) {
@@ -66,10 +68,9 @@ public class User {
     }
 
 
-
-
     /**
      * Gets the name of the user.
+     *
      * @return The user's name.
      */
     public String getName() {
@@ -78,6 +79,7 @@ public class User {
 
     /**
      * Sets the name of the user.
+     *
      * @param name The user's name.
      */
     public void setName(String name) {
@@ -86,6 +88,7 @@ public class User {
 
     /**
      * Gets the email address of the user.
+     *
      * @return The user's email address.
      */
     public String getEmail() {
@@ -94,6 +97,7 @@ public class User {
 
     /**
      * Sets the email address of the user.
+     *
      * @param email The user's email address.
      */
     public void setEmail(String email) {
@@ -102,6 +106,7 @@ public class User {
 
     /**
      * Gets the encrypted password of the user.
+     *
      * @return The user's password.
      */
     public String getPasswordHash() {
@@ -110,6 +115,7 @@ public class User {
 
     /**
      * Sets the encrypted password of the user.
+     *
      * @param passwordHash The user's password.
      */
     public void setPasswordHash(String passwordHash) {
@@ -118,6 +124,7 @@ public class User {
 
     /**
      * Gets the role of the user.
+     *
      * @return The user's role.
      */
     public String getRole() {
@@ -126,6 +133,7 @@ public class User {
 
     /**
      * Sets the role of the user.
+     *
      * @param role The user's role.
      */
     public void setRole(String role) {
@@ -134,6 +142,7 @@ public class User {
 
     /**
      * Gets the timestamp of the user's last login.
+     *
      * @return The last login timestamp.
      */
     public LocalDateTime getLastLogin() {
@@ -142,6 +151,7 @@ public class User {
 
     /**
      * Sets the timestamp of the user's last login.
+     *
      * @param lastLogin The last login timestamp.
      */
     public void setLastLogin(LocalDateTime lastLogin) {
@@ -149,5 +159,14 @@ public class User {
     }
 
 
-
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", email='" + email + '\'' +
+                ", role='" + role + '\'' +
+                ", lastLogin=" + lastLogin +
+                '}';
+    }
 }

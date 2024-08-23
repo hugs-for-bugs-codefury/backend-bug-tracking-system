@@ -8,6 +8,7 @@ import org.example.services.IUserService;
 
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
+import java.time.LocalDateTime;
 
 public class UserServiceImpl  implements IUserService {
 
@@ -38,8 +39,8 @@ public class UserServiceImpl  implements IUserService {
 
     }
 
-    @Override
-    public void login(String email, String password) {
+
+    protected User login(String email, String password) {
         String hashedPassword = null;
         try {
             hashedPassword = hashPassword(password);
@@ -55,9 +56,17 @@ public class UserServiceImpl  implements IUserService {
             throw new IllegalArgumentException("Invalid password");
         }
 
+        try {
+            userDAO.comparePassword(email, hashedPassword);
+            user.setLastLogin(userDAO.updateLastLogin(user.getId()));
 
+
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
 
         this.user = user;
+        return user;
     }
 
 

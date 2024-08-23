@@ -4,11 +4,10 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 
-
 /**
  * The Developer class extends the User class and represents a developer in the system.
  * A Developer is responsible for working on bugs and implementing features in the projects.
- *
+ * <p>
  * Fields:
  * - String developerId: A unique identifier for the developer.
  * - List<String> projectIds: The list of project IDs to which the developer is currently assigned.
@@ -23,13 +22,12 @@ public class Developer extends User {
     /**
      * Constructs a new Developer with the specified developer ID.
      *
-     * @param developerId The unique identifier for the developer.
-     * @param id          The user ID.
-     * @param name        The user's name.
-     * @param email       The user's email address.
+     * @param developerId  The unique identifier for the developer.
+     * @param id           The user ID.
+     * @param name         The user's name.
+     * @param email        The user's email address.
      * @param passwordHash The hashed password for authentication.
-     * @param role        The user's role (e.g., "developer").
-
+     * @param role         The user's role (e.g., "developer").
      */
     public Developer(int id, int developerId, String name, String email,
                      String passwordHash) {
@@ -40,18 +38,17 @@ public class Developer extends User {
     /**
      * Constructs a new Developer with the specified developer ID, project IDs, and assigned bug IDs.
      *
-     * @param developerId     The unique identifier for the developer.
-     * @param projectIds      The list of project IDs to which the developer is assigned.
-     * @param assignedBugIds  The list of bug IDs assigned to the developer for resolution.
-     * @param id              The user ID.
-     * @param name            The user's name.
-     * @param email           The user's email address.
-     * @param passwordHash    The hashed password for authentication.
-     * @param role            The user's role (e.g., "developer").
-
+     * @param developerId    The unique identifier for the developer.
+     * @param projectIds     The list of project IDs to which the developer is assigned.
+     * @param assignedBugIds The list of bug IDs assigned to the developer for resolution.
+     * @param id             The user ID.
+     * @param name           The user's name.
+     * @param email          The user's email address.
+     * @param passwordHash   The hashed password for authentication.
+     * @param role           The user's role (e.g., "developer").
      */
     public Developer(int id, int developerId, List<String> projectIds, List<String> assignedBugIds,
-                      String name, String email, String passwordHash) {
+                     String name, String email, String passwordHash) {
         super(id, name, email, passwordHash, "developer"); // Call the User class constructor
         this.developerId = developerId;
         this.projectIds = projectIds;
@@ -120,4 +117,12 @@ public class Developer extends User {
     }
 
 
+    @Override
+    public String toString() {
+        return super.toString() + "Developer{" +
+                "developerId=" + developerId +
+                ", projectIds=" + projectIds +
+                ", assignedBugIds=" + assignedBugIds +
+                '}';
+    }
 }

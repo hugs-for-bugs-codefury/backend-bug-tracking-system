@@ -80,13 +80,15 @@ public class DeveloperServiceImpl extends UserServiceImpl  implements IDeveloper
 
 
     @Override
-    public void login(String email, String password) {
+    public Developer login(String email, String password) {
         DeveloperDAOImpl developerDAO = new DeveloperDAOImpl();
         try {
 
-            super.login(email, password);
+            User loggedIn = super.login(email, password);
 
             this.user = developerDAO.findByEmail(email);
+            this.user.setLastLogin(loggedIn.getLastLogin());
+            return this.user;
 
         } catch (Exception e) {
             throw new IllegalArgumentException("Invalid email or password");

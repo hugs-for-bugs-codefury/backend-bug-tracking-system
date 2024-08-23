@@ -59,17 +59,23 @@ public class TesterServiceImpl extends UserServiceImpl implements ITesterService
 
 
     @Override
-    public void login(String email, String password) {
+    public Tester login(String email, String password) {
         TesterDAOImpl testerDAO = new TesterDAOImpl();
         try {
 
-            super.login(email, password);
+           User loggedIn =  super.login(email, password);
 
             this.user = testerDAO.findByEmail(email);
+            this.user.setLastLogin(testerDAO.updateLastLogin(this.user.getTesterId()));
+
+
+            return this.user;
+
 
         } catch (Exception e) {
             throw new IllegalArgumentException("Invalid email or password");
         }
+
 
     }
 

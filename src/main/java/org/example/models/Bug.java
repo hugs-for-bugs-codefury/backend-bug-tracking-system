@@ -5,7 +5,7 @@ import java.time.LocalDateTime;
 /**
  * The Bug class represents a bug in the bug-tracking system.
  * Bugs are reported by Testers and resolved by Developers.
- *
+ * <p>
  * Example properties include:
  * - int bugId: The unique identifier for the bug.
  * - String title: A short, descriptive title of the bug.
@@ -33,13 +33,13 @@ public class Bug {
     /**
      * Constructs a Bug object with the specified parameters.
      *
-     * @param bugId The unique identifier for the bug.
-     * @param title The title of the bug.
+     * @param bugId       The unique identifier for the bug.
+     * @param title       The title of the bug.
      * @param description A detailed description of the bug.
-     * @param severity The severity level of the bug (e.g., "Low", "Medium", "High").
-     * @param createdOn The timestamp when the bug was reported.
+     * @param severity    The severity level of the bug (e.g., "Low", "Medium", "High").
+     * @param createdOn   The timestamp when the bug was reported.
      * @param createdById The id of tester who reported the bug.
-     * @param projectId The project id to which this bug is related.
+     * @param projectId   The project id to which this bug is related.
      */
     public Bug(int bugId, String title, String description, String severity, String status, LocalDateTime createdOn, int createdById, int projectId) {
         this.bugId = bugId;
@@ -53,7 +53,7 @@ public class Bug {
     }
 
 
-    public Bug(String title, String description, String severity,String status, LocalDateTime createdOn, int createdById, int projectId) {
+    public Bug(String title, String description, String severity, String status, LocalDateTime createdOn, int createdById, int projectId) {
         this.title = title;
         this.description = description;
         this.severity = severity;
@@ -227,16 +227,19 @@ public class Bug {
         this.projectId = projectId;
     }
 
-    /**
-     * Returns a string representation of the Bug object, including all of its details.
-     *
-     * @return A string representation of the bug.
-     */
+
     @Override
     public String toString() {
-        return "Bug [id=" + bugId + ", title=" + title + ", description=" + description + ", severity=" + severity
-                + ", createdOn=" + createdOn + ", createdBy=" + createdById + ", assignedTo="
-                + (assignedTo != null ? assignedTo.getName() : "Unassigned") + ", status=" + status + ", project="
-                +projectId + "]";
+        return "Bug{" +
+                "bugId=" + bugId +
+                ", title='" + title + '\'' +
+                ", description='" + description + '\'' +
+                ", severity='" + severity + '\'' +
+                ", createdOn=" + createdOn +
+                ", createdById=" + createdById +
+                ", assignedTo=" + assignedTo +
+                ", status='" + status + '\'' +
+                ", projectId=" + projectId +
+                '}';
     }
 }

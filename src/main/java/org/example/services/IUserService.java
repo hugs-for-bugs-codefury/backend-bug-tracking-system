@@ -15,13 +15,7 @@ public interface IUserService {
      */
     User registerUser(String name, String email, String password, String role) throws Exception;
 
-    /**
-     * Login a user
-     * @param email
-     * @param password
-     * @return
-     */
-    void login(String email, String password) throws Exception;
+
 
     /**
      * Get a user by id

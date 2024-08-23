@@ -21,6 +21,7 @@ public class App
         // ================================== Service Factory ==================================
 
         IProjectManagerService projectManagerService = (IProjectManagerService) ServiceFactory.getService("ProjectManagerService");
+
         IDeveloperService developerService = (IDeveloperService) ServiceFactory.getService("DeveloperService");
         ITesterService testerService = (ITesterService) ServiceFactory.getService("TesterService");
 
@@ -42,9 +43,11 @@ public class App
         System.out.println("=".repeat(20) + " Project Manager " + "=".repeat(20));
 
         // 1. Project manager logs in
-        System.out.println("Project manager logs in");
+        System.out.println("▶️Project manager logs in");
+
         try {
-            projectManagerService.login(pm.getEmail(), "password1");
+            pm = projectManagerService.login(pm.getEmail(), "password1");
+            System.out.println(pm);
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
@@ -52,16 +55,16 @@ public class App
 
 
         // 2. Project manager creates a project
-        System.out.println("Creating a project");
-        Project project1 = projectManagerService.createProject("Project 1", LocalDateTime.now());
-        Project project2 = projectManagerService.createProject("Project 2", LocalDateTime.now());
-        System.out.println("Project created: " + project1);
-        System.out.println("Project created: " + project2);
+        System.out.println("▶️Creating a project");
+        Project project1 = projectManagerService.createProject(DummyData.getProjectName(), LocalDateTime.now());
+        Project project2 = projectManagerService.createProject(DummyData.getProjectName(), LocalDateTime.now());
+        System.out.println( project1);
+        System.out.println( project2);
 
 
 
 //      // 3. Project manager assigns testers to the project
-        System.out.println("Assigning testers to the project");
+        System.out.println("▶️Assigning testers to the project");
         projectManagerService.assignTester(project1, testerService.getTester(tester1.getTesterId()));
         projectManagerService.assignTester(project1, testerService.getTester(tester2.getTesterId()));
 
@@ -73,21 +76,22 @@ public class App
 
 
         // 1. Tester logs in
-        System.out.println("Tester1 logs in");
+        System.out.println("▶️Tester1 logs in");
         try {
-            testerService.login(tester1.getEmail(), "password4");
+            tester1 = testerService.login(tester1.getEmail(), "password4");
+            System.out.println(tester1);
         } catch (Exception e) {
             e.printStackTrace();
         }
 
 
         // 2. Tester reports bugs
-        System.out.println("Reporting bugs");
-        Bug bug1 = testerService.reportBug(project1, "Bug 1", "Bug 1 Description", "high");
-        Bug bug2 = testerService.reportBug(project1, "Bug 2", "Bug 2 Description", "medium");
-        Bug bug3 = testerService.reportBug(project1, "Bug 3", "Bug 3 Description", "low");
+        System.out.println("▶️Reporting bugs");
+        Bug bug1 = testerService.reportBug(project1, DummyData.getBugTitle(), DummyData.getBugDescription(), DummyData.getBugSeverity());
+        Bug bug2 = testerService.reportBug(project1, DummyData.getBugTitle(), DummyData.getBugDescription(), DummyData.getBugSeverity());
+        Bug bug3 = testerService.reportBug(project1, DummyData.getBugTitle(), DummyData.getBugDescription(), DummyData.getBugSeverity());
 
-        System.out.println("Bugs reported: ");
+        System.out.println("▶️Bugs reported: ");
         System.out.println(bug1);
         System.out.println(bug2);
         System.out.println(bug3);
@@ -98,30 +102,31 @@ public class App
         System.out.println("=".repeat(20) + " Project Manager " + "=".repeat(20));
 
         // 1. Manager assigns a bug to a developer
-        System.out.println("Assigning a bug to a developer");
+        System.out.println("▶️Assigning a bug to a developer");
         projectManagerService.assignDeveloper(bug1, developerService.getDeveloper(dev1.getDeveloperId()));
 
 
         // =================================== Developer ==================================
         System.out.println("=".repeat(20) + " Developer " + "=".repeat(20));
         // 1. Developer logs in
-        System.out.println("Developer logs in");
+        System.out.println("▶️Developer logs in");
         try {
-            developerService.login(dev1.getEmail(), "password2");
+           dev1 = developerService.login(dev1.getEmail(), "password2");
+            System.out.println(dev1);
         } catch (Exception e) {
             System.out.println(e.getMessage());
             return;
         }
 
         // 2. Developer gets assigned bugs
-        System.out.println("Getting assigned bugs");
+        System.out.println("▶️Getting assigned bugs");
         List<Bug> bugs = developerService.getAssignedBugs();
 
         System.out.println("Bugs assigned to " + developerService.getCurrentDeveloper().getName());
-        bugs.forEach(bug -> System.out.println(bug.getTitle()));
+        bugs.forEach(bug -> System.out.println(bug.getId() + ": "+ bug.getTitle() + " - " + bug.getSeverity() + " - " + bug.getStatus()));
 
         // 3. Developer closes bugs
-        System.out.println("Closing bugs");
+        System.out.println("▶️Closing bugs");
         for (Bug bug : bugs) {
             developerService.closeBug(bug.getId());
             System.out.println("Bug closed: " + bug.getTitle());
@@ -129,11 +134,11 @@ public class App
         //====================================== Project Manager ==================================
         System.out.println("=".repeat(20) + " Project Manager " + "=".repeat(20));
         // 1. Manager sees status of bugs
-        System.out.println("Getting status of the project");
+        System.out.println("▶️Getting status of the project");
         try {
             Project p = projectManagerService.getProject(project1.getProjectId());
-            System.out.println("Project: " + p.getProjectName());
-            System.out.println("Bugs: ");
+            System.out.println(p);
+            System.out.println("Bugs Status: ");
             p.getBugs().forEach(bug -> System.out.println(bug.getTitle() + " - " + bug.getSeverity() + " - " + bug.getStatus()));
 
 

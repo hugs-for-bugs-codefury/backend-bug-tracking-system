@@ -8,6 +8,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
 
 public class UserDAOImpl implements IUserDAO {
     @Override
@@ -67,6 +68,20 @@ public class UserDAOImpl implements IUserDAO {
             throw new RuntimeException(e);
         }
         return null;
+    }
+
+    @Override
+    public LocalDateTime updateLastLogin(int user_id) throws Exception {
+        String sql = "UPDATE users SET last_login = ? WHERE user_id = ?";
+        try (Connection connection = MySQLConnection.getConnection()) {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setObject(1, LocalDateTime.now());
+            ps.setInt(2, user_id);
+            ps.executeUpdate();
+            return LocalDateTime.now();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override

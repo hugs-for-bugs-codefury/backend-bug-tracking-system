@@ -52,7 +52,7 @@ public class ProjectManagerServiceImpl extends UserServiceImpl implements IProje
             throw new IllegalArgumentException("Unauthorized access");
         }
         ProjectServiceImpl projectService = new ProjectServiceImpl();
-        return projectService.createProject(name, startDate, user.getId());
+        return projectService.createProject(name, startDate, user.getManagerId());
     }
 
 
@@ -77,13 +77,16 @@ public class ProjectManagerServiceImpl extends UserServiceImpl implements IProje
     }
 
     @Override
-    public void login(String email, String password) {
+    public ProjectManager login(String email, String password) {
         ProjectManagerDAOImpl projectManagerDAO = new ProjectManagerDAOImpl();
         try {
 
-            super.login(email, password);
+            User loggedIn = super.login(email, password);
 
             this.user = projectManagerDAO.findByEmail(email);
+            this.user.setLastLogin(loggedIn.getLastLogin());
+
+            return this.user;
 
         } catch (Exception e) {
             throw new IllegalArgumentException("Invalid email or password");

@@ -72,4 +72,13 @@ public class ProjectManager extends User {
     public void setProjectIds(List<Integer> projectIds) {
         this.projectIds = projectIds;
     }
+
+
+    @Override
+    public String toString() {
+        return super.toString() + "ProjectManager{" +
+                "managerId=" + managerId +
+                ", projectIds=" + projectIds +
+                '}';
+    }
 }

@@ -104,4 +104,14 @@ public class Tester extends User {
     public void reportBug(Bug bug) {
         this.reportedBugs.add(bug);
     }
+
+
+    @Override
+    public String toString() {
+        return super.toString() + "Tester{" +
+                "testerId=" + testerId +
+                ", projects=" + projects +
+                ", reportedBugs=" + reportedBugs +
+                '}';
+    }
 }

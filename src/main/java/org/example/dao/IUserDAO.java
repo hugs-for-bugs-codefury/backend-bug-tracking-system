@@ -3,6 +3,7 @@ package org.example.dao;
 import org.example.models.Bug;
 import org.example.models.User;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -23,5 +24,5 @@ public interface IUserDAO {
     public User findByID(int id) throws Exception;
     public User saveUser(String name, String email, String password, String role) throws Exception;
     public boolean comparePassword(String email, String password) throws Exception;
-
+    public LocalDateTime updateLastLogin(int user_id) throws Exception;
 }

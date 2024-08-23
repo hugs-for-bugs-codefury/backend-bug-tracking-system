@@ -22,8 +22,6 @@ public class BugServiceImpl implements IBugService {
         BugDAOImpl bugDAO = new BugDAOImpl();
        return bugDAO.assignDeveloper(bugId, developerId);
 
-
-
     }
 
 
