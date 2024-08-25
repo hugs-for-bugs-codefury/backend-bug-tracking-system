@@ -10,6 +10,7 @@
 ## About <a name = "about"></a>
 
 Backend application with layered architecture.
+Backend application with layered architecture.
 
 ## Getting Started <a name = "getting_started"></a>
 
@@ -22,16 +23,20 @@ What things you need to install the software and how to install them.
 ```
 java 22
 mysql
+java 22
+mysql
 ```
 
 
 ### Installing
 
-<<<<<<< HEAD
-1. Clone the repo
-=======
 Clone the repo
->>>>>>> bb5fe003d356c92b936128a17a947d7235f68253
+
+```bash
+git clone https://github.com/hugs-for-bugs-codefury/backend-bug-tracking-system.git
+```
+
+Or, if you are using SSH use:
 
 ```
 git clone git@github.com:hugs-for-bugs-codefury/backend-bug-tracking-system.git
