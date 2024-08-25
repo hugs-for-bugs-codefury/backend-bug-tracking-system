@@ -50,6 +50,16 @@ public class Tester extends User {
         this.reportedBugs = reportedBugs;
     }
 
+    public Tester(String janeSmith, String mail, int testerId) {
+        super();
+        this.testerId = testerId;
+    }
+
+    public Tester(int testerId) {
+        super();
+        this.testerId = testerId;
+    }
+
 
     /**
      * Retrieves the unique identifier of the tester.

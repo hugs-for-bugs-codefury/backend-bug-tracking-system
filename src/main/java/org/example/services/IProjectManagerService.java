@@ -78,4 +78,5 @@ public interface IProjectManagerService extends IUserService {
      * @param developerId The unique ID of the developer to be assigned to the bug.
      */
     void assignDeveloperToBug(int bugId, int developerId);
+
 }

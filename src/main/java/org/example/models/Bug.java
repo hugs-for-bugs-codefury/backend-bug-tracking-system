@@ -64,6 +64,9 @@ public class Bug {
 
     }
 
+    public Bug(String testBug, String description) {
+    }
+
 
     /**
      * Gets the unique identifier for the bug.

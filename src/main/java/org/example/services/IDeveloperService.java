@@ -10,6 +10,7 @@ import java.util.List;
  * The {@code IDeveloperService} interface extends the {@link IUserService} and provides
  * specific methods for managing developer-related operations within the system. This includes
  * registration, login, retrieving developer details, closing bugs, and accessing assigned projects and bugs.
+
  */
 public interface IDeveloperService extends IUserService {
 
@@ -31,7 +32,7 @@ public interface IDeveloperService extends IUserService {
      * @return The authenticated {@link Developer} object.
      */
     Developer login(String email, String password);
-
+  
     /**
      * Retrieves the currently logged-in developer.
      *
@@ -76,3 +77,4 @@ public interface IDeveloperService extends IUserService {
      */
     List<Bug> getAssignedBugs();
 }
+
