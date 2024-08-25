@@ -58,6 +58,7 @@ public class TesterServiceImpl extends UserServiceImpl implements ITesterService
 
     @Override
     public Bug reportBug(Project project, String title, String description, String severity) {
+
         BugServiceImpl bugService = new BugServiceImpl();
         return bugService.reportBug(title, description, severity, project.getProjectId(), user.getTesterId());
 

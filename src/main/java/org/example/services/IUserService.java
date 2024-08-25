@@ -32,4 +32,6 @@ public interface IUserService {
      */
     Project getProject(int projectId) ;
 
+    User login(String email, String password);
+
 }

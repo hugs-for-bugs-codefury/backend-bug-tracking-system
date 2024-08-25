@@ -42,8 +42,8 @@ public class UserServiceImpl  implements IUserService {
 
     }
 
-
-    protected User login(String email, String password) {
+    @Override
+    public User login(String email, String password) {
         String hashedPassword = null;
         try {
             hashedPassword = Algorithms.hashPassword(password);
