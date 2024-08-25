@@ -98,7 +98,7 @@ public class App {
             // 1. Manager assigns a bug to a developer
             System.out.println("▶️Assigning a bug to a developer");
             projectManagerService.assignDeveloperToBug(bug1.getId(), dev1.getDeveloperId());
-            projectManagerService.assignDeveloperToBug(bug4.getId(), dev1.getDeveloperId());
+            projectManagerService.assignDeveloperToBug(bug2.getId(), dev1.getDeveloperId());
 
 
             // =================================== Developer ==================================
