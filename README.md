@@ -9,7 +9,7 @@
 
 ## About <a name = "about"></a>
 
-Write about 1-2 paragraphs describing the purpose of your project.
+Backend application with layered architecture.
 
 ## Getting Started <a name = "getting_started"></a>
 
@@ -20,27 +20,47 @@ These instructions will get you a copy of the project up and running on your loc
 What things you need to install the software and how to install them.
 
 ```
-Give examples
+java 22
+mysql
 ```
+
 
 ### Installing
 
-A step by step series of examples that tell you how to get a development env running.
-
-Say what the step will be
-
-```
-Give the example
-```
-
-And repeat
+<<<<<<< HEAD
+1. Clone the repo
+=======
+Clone the repo
+>>>>>>> bb5fe003d356c92b936128a17a947d7235f68253
 
 ```
-until finished
+git clone git@github.com:hugs-for-bugs-codefury/backend-bug-tracking-system.git
 ```
-
-End with an example of getting some data out of the system or using it for a little demo.
 
 ## Usage <a name = "usage"></a>
 
-Add notes about how to use the system.
+Edit the config file `src\main\java\org\example\util\Config.java` to setup database connection.
+
+
+1. Open the cloned repo in IntelliJ IDEA or any other IDE.
+
+2. Start the MySQL server, and if running for the first time setup the database.
+
+3. To setup the database for first time, run the SQL script `schema.sql`
+
+4. Edit the `src\main\java\org\example\util\Config.java` file to setup the database connection and other config.
+
+```java
+public class Config {
+    public static final String URL = "jdbc:mysql://localhost:3306/bug_tracking_system";
+    public static final String USER = "root";
+    public static final String PASSWORD = "password";
+}
+```
+
+Run the application using IntelliJ IDEA, or if you have maven installed, you can run the application using the following command:
+
+```bash
+mvn clean install
+mvn exec:java -Dexec.mainClass="org.example.App"
+```

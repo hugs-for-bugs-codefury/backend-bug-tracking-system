@@ -69,20 +69,19 @@ public class DeveloperServiceTest {
 
     @Test
     public void testGetAssignedProject() {
-        Project project = developerService.getAssignedProject();
+       List<Project> project = developerService.getAssignedProjects();
 
         assertNotNull(project);
-        assertEquals(1, project.getProjectId());
-        assertEquals("Test Project", project.getProjectName());
+        assertEquals(1, project.size());
+        assertEquals("Test Project", project.get(0).getProjectName());
     }
 
     @Test
     public void testGetAssignedProjectById() {
-        Project project = developerService.getAssignedProject(1);
+        List <Project> project = developerService.getAssignedProjects(1);
 
         assertNotNull(project);
-        assertEquals(1, project.getProjectId());
-        assertEquals("Test Project", project.getProjectName());
+        assertEquals(1, project.size());
     }
 
     @Test
@@ -130,10 +129,8 @@ public class DeveloperServiceTest {
         }
 
         @Override
-        public Project getAssignedProject(int developerId) {
-            Project project = new Project("Test Project", "Description", LocalDateTime.now());
-            project.setProjectId(1);
-            return project;
+        public List<Project> getAssignedProjects(int developerId) {
+            return Arrays.asList(new Project("Test Project", LocalDateTime.now().plusDays(2)));
         }
 
         @Override

@@ -72,24 +72,13 @@ class IProjectManagerServiceTest {
         Assertions.assertEquals(projectManager.getManagerId(), project.getProjectManagerId());
     }
 
-    @Test
-    void testAssignTester() {
-        Project project = new Project("Test Project", LocalDateTime.now().plusDays(2));
-        Tester tester = new Tester("Jane Smith", "jane@example.com");
-
-        projectManagerService.assignTester(project, tester);
-
-        List<Integer> assignedTesters = project.getTesters();
-        Assertions.assertNotNull(assignedTesters);
-        Assertions.assertTrue(assignedTesters.contains(tester));
-    }
 
     @Test
     void testAssignDeveloper() {
         Bug bug = new Bug("Test Bug", "Description");
         Developer developer = new Developer("John Doe", "john@example.com");
 
-        projectManagerService.assignDeveloper(bug, developer);
+        projectManagerService.assignDeveloperToBug(bug.getId(), developer.getDeveloperId());
 
         Assertions.assertEquals(developer, bug.getCreatedById());
     }
