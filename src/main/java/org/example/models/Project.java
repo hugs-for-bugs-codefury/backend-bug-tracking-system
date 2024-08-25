@@ -62,6 +62,17 @@ public class Project {
         this.bugs = new ArrayList<>();
     }
 
+    public Project(String testProject, LocalDateTime localDateTime) {
+    }
+
+    public Project(String testProject, String description, LocalDateTime now) {
+    }
+
+    public Project() {
+
+    }
+
+
     /**
      * Retrieves the unique identifier of the project.
      *

@@ -58,6 +58,8 @@ public interface IProjectManagerService extends IUserService {
      */
     public ProjectManager getProjectManager(int projectManagerId);
 
+    Project createProject(String name, LocalDateTime startDate);
+
     /**
      * Creates a new project with the specified name and start date.
      *

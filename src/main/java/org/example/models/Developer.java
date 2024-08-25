@@ -61,6 +61,14 @@ public class Developer extends User {
 
     }
 
+    public Developer(String johnDoe, String mail) {
+        super();
+    }
+
+    public Developer(String johnDoe, String mail, String password123, String developer) {
+        super();
+    }
+
 
     /**
      * Gets the unique identifier for the developer.
