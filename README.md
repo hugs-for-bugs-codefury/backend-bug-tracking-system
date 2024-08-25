@@ -9,7 +9,7 @@
 
 ## About <a name = "about"></a>
 
-Write about 1-2 paragraphs describing the purpose of your project.
+Backend application with layered architecture.
 
 ## Getting Started <a name = "getting_started"></a>
 
@@ -20,27 +20,41 @@ These instructions will get you a copy of the project up and running on your loc
 What things you need to install the software and how to install them.
 
 ```
-Give examples
+java 22
+mysql
 ```
+
 
 ### Installing
 
-A step by step series of examples that tell you how to get a development env running.
-
-Say what the step will be
+Clone the repo
 
 ```
-Give the example
+git clone git@github.com:hugs-for-bugs-codefury/backend-bug-tracking-system.git
 ```
 
-And repeat
+Open the cloned repo in IntelliJ IDEA or any other IDE.
 
-```
-until finished
-```
 
 End with an example of getting some data out of the system or using it for a little demo.
 
 ## Usage <a name = "usage"></a>
 
-Add notes about how to use the system.
+Edit the config file `src\main\java\org\example\util\Config.java` to setup database connection.
+
+
+
+
+```java
+public class Config {
+    public static final String URL = "jdbc:mysql://localhost:3306/bug_tracking_system";
+    public static final String USER = "root";
+    public static final String PASSWORD = "password";
+}
+```
+
+Run the application using IntelliJ IDEA or compile the application using the following command.
+
+```java
+javac Main.java
+```

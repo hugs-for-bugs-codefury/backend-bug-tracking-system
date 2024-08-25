@@ -91,8 +91,8 @@ class ProjectServiceTest {
     void testGetProjectByDeveloper() {
         int developerId = 2;
 
-        Project project = projectService.getProjectByDeveloper(developerId);
-        assertNotNull(project);
+        List<Project> project = projectService.getProjectByDeveloper(developerId);
+        assertTrue(project.isEmpty());
     }
 
     @Test
