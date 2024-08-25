@@ -2,9 +2,12 @@ package org.example.services.impl;
 
 import org.example.dao.impl.ProjectDAOImpl;
 import org.example.dao.impl.UserDAOImpl;
+import org.example.exceptions.users.UserNotAuthorizedException;
+import org.example.exceptions.users.UserNotFoundException;
 import org.example.models.Project;
 import org.example.models.User;
 import org.example.services.IUserService;
+import org.example.util.Algorithms;
 
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
@@ -31,7 +34,7 @@ public class UserServiceImpl  implements IUserService {
         try {
 
             UserDAOImpl userDAO = new UserDAOImpl();
-            return userDAO.saveUser(name, email, hashPassword(password), role);
+            return userDAO.saveUser(name, email, Algorithms.hashPassword(password), role);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -39,75 +42,61 @@ public class UserServiceImpl  implements IUserService {
 
     }
 
-
-    protected User login(String email, String password) {
+    @Override
+    public User login(String email, String password) {
         String hashedPassword = null;
         try {
-            hashedPassword = hashPassword(password);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-        UserDAOImpl userDAO = new UserDAOImpl();
-        User user = userDAO.findByEmail(email);
-        if(user == null) {
-            throw new IllegalArgumentException("User not found");
-        }
-        if(!user.getPasswordHash().equals(hashedPassword)) {
-            throw new IllegalArgumentException("Invalid password");
-        }
+            hashedPassword = Algorithms.hashPassword(password);
 
-        try {
-            userDAO.comparePassword(email, hashedPassword);
+            UserDAOImpl userDAO = new UserDAOImpl();
+            User user = userDAO.findByEmail(email);
+            if (user == null) {
+                throw new UserNotFoundException("User not found");
+            }
+            if (!user.getPasswordHash().equals(hashedPassword)) {
+                throw new UserNotAuthorizedException("Invalid password");
+            }
+
             user.setLastLogin(userDAO.updateLastLogin(user.getId()));
-
+            this.user = user;
+            return user;
 
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException(e.getMessage());
         }
 
-        this.user = user;
-        return user;
     }
 
 
     @Override
     public User getUser(int userId) {
         UserDAOImpl userDAO = new UserDAOImpl();
-        return userDAO.findByID(userId);
+        try {
+            return userDAO.findByID(userId);
+        } catch (Exception e) {
+            throw new RuntimeException(e.getMessage());
+        }
+
     }
 
 
     @Override
     public Project getProject(int projectId) {
         if(this.user == null) {
-            throw new IllegalArgumentException("Unauthorized access");
+            throw new UserNotAuthorizedException("Unauthorized access, please login");
         }
         ProjectDAOImpl projectDAO = new ProjectDAOImpl();
-        Project p =  projectDAO.findByID(projectId);
-        if(p == null) {
-            throw new IllegalArgumentException("Project not found");
-        }
 
-        return p;
+        try {
+            return projectDAO.findByID(projectId);
+        } catch (Exception e) {
+            throw new RuntimeException(e.getMessage());
+        }
 
     }
 
 
 
-    protected static String hashPassword(String password) throws Exception {
-        MessageDigest digest = MessageDigest.getInstance("SHA-256");
-        byte[] hashBytes = digest.digest(password.getBytes(StandardCharsets.UTF_8));
 
-        // Convert bytes to hex string
-        StringBuilder hexString = new StringBuilder();
-        for (byte hashByte : hashBytes) {
-            String hex = Integer.toHexString(0xff & hashByte);
-            if (hex.length() == 1) {
-                hexString.append('0');
-            }
-            hexString.append(hex);
-        }
-        return hexString.toString();
-    }
 
 }

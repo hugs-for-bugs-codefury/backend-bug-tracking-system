@@ -9,7 +9,6 @@ public abstract class Config {
     private static final String db_user = "root";
     private static final String db_password = "admin";
 
-
     private static final Properties properties = new Properties();
 
 
@@ -17,6 +16,7 @@ public abstract class Config {
         properties.put("db.url", db_url);
         properties.put("db.user", db_user);
         properties.put("db.password", db_password);
+
 
     }
 

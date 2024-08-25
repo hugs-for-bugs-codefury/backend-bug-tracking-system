@@ -92,7 +92,7 @@ CREATE TABLE bugs (
     FOREIGN KEY (assigned_to) REFERENCES developers(developer_id)
 );
 
--- Trigger to enforce Developer can be assigned to only one project
+-- Trigger to enforce Developer can be assigned to only one projectU
 DELIMITER $$
 CREATE TRIGGER trg_check_developer_assignment
 BEFORE INSERT ON developers_projects

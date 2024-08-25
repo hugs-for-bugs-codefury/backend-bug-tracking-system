@@ -1,92 +1,82 @@
 package org.example.services;
 
-import org.example.models.*;
+import org.example.models.Project;
+import org.example.models.ProjectManager;
+
 import java.time.LocalDateTime;
 
 /**
- * The IProjectManagerService interface extends the IUserService interface
- * and defines additional methods specifically for project manager-related
- * functionalities within the bug tracking system.
- *
- * This interface provides methods for project manager registration, login,
- * retrieving project manager information, managing projects, and assigning
- * team members (testers and developers) to projects and bugs. It is intended
- * to be implemented by a service class that handles the business logic
- * associated with project managers.
+ * The {@code IProjectManagerService} interface extends the {@link IUserService} and provides
+ * specific methods for managing project manager-related operations within the system. This includes
+ * registration, login, project creation, and the assignment of testers and developers to projects and bugs.
  */
 public interface IProjectManagerService extends IUserService {
 
     /**
-     * Registers a new project manager with the given details.
+     * Registers a new project manager in the system.
      *
      * @param name     The name of the project manager.
      * @param email    The email address of the project manager.
      * @param password The password for the project manager's account.
-     * @return The newly registered ProjectManager object.
-     *
-
+     * @return The newly registered {@link ProjectManager} object.
      */
-    public ProjectManager registerUser(String name, String email, String password);
+    ProjectManager registerUser(String name, String email, String password);
 
     /**
      * Authenticates a project manager with the provided email and password.
      *
-     * @param email    The email address of the project manager trying to log in.
-     * @param password The password corresponding to the email.
-     * @return The ProjectManager object if login is successful; otherwise, null.
-     *
-
+     * @param email    The email address of the project manager.
+     * @param password The password for the project manager's account.
+     * @return The authenticated {@link ProjectManager} object.
      */
-    public ProjectManager login(String email, String password);
+    ProjectManager login(String email, String password);
 
     /**
      * Retrieves the currently logged-in project manager.
      *
-     * @return The ProjectManager object representing the currently authenticated project manager.
-     *
-
+     * @return The {@link ProjectManager} object representing the current project manager.
      */
-    public ProjectManager getCurrentProjectManager();
+    ProjectManager getCurrentProjectManager();
 
     /**
-     * Retrieves a project manager by their unique project manager ID.
+     * Retrieves a project manager by their unique ID.
      *
      * @param projectManagerId The unique ID of the project manager.
-     * @return The ProjectManager object corresponding to the given projectManagerId.
-     *
-
+     * @return The {@link ProjectManager} object representing the project manager with the specified ID.
      */
-    public ProjectManager getProjectManager(int projectManagerId);
-
-    Project createProject(String name, LocalDateTime startDate);
+    ProjectManager getProjectManager(int projectManagerId);
 
     /**
-     * Creates a new project with the specified name and start date.
+     * Creates a new project in the system.
      *
-     * @param name      The name of the project to be created.
+     * @param name      The name of the project.
      * @param startDate The start date of the project.
-     * @return The newly created Project object.
-     *
-
+     * @return The newly created {@link Project} object.
+     */
     Project createProject(String name, LocalDateTime startDate);
 
     /**
      * Assigns a tester to a project.
      *
-     * @param project The Project object to which the tester will be assigned.
-     * @param tester  The Tester object representing the tester to be assigned.
-     *
-
+     * @param projectId The unique ID of the project.
+     * @param testerId  The unique ID of the tester to be assigned to the project.
      */
-    public void assignTester(Project project, Tester tester);
+    void assignTesterToProject(int projectId, int testerId);
 
     /**
-     * Assigns a developer to a bug for resolution.
+     * Assigns a developer to a project.
      *
-     * @param bug       The Bug object representing the bug to be assigned.
-     * @param developer The Developer object representing the developer who will resolve the bug.
-     *
-
+     * @param projectId   The unique ID of the project.
+     * @param developerId The unique ID of the developer to be assigned to the project.
      */
-    public void assignDeveloper(Bug bug, Developer developer);
+    void assignDeveloperToProject(int projectId, int developerId);
+
+    /**
+     * Assigns a developer to a specific bug.
+     *
+     * @param bugId       The unique ID of the bug.
+     * @param developerId The unique ID of the developer to be assigned to the bug.
+     */
+    void assignDeveloperToBug(int bugId, int developerId);
+
 }

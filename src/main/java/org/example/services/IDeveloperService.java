@@ -1,76 +1,80 @@
 package org.example.services;
 
-import org.example.models.*;
+import org.example.models.Bug;
+import org.example.models.Developer;
+import org.example.models.Project;
 
 import java.util.List;
 
 /**
- * The IDeveloperService interface provides methods for managing developer-specific operations,
- * including user registration, login, and handling of assigned projects and bugs.
- * It extends the IUserService interface, inheriting its user-related functionalities.
+ * The {@code IDeveloperService} interface extends the {@link IUserService} and provides
+ * specific methods for managing developer-related operations within the system. This includes
+ * registration, login, retrieving developer details, closing bugs, and accessing assigned projects and bugs.
+
  */
 public interface IDeveloperService extends IUserService {
 
     /**
-     * Registers a new developer with the given details.
+     * Registers a new developer in the system.
      *
-     * @param name     the name of the developer.
-     * @param email    the email address of the developer.
-     * @param password the password for the developer's account.
-     * @return the registered Developer object.
+     * @param name     The name of the developer.
+     * @param email    The email address of the developer.
+     * @param password The password for the developer's account.
+     * @return The newly registered {@link Developer} object.
      */
-    public Developer registerUser(String name, String email, String password);
+    Developer registerUser(String name, String email, String password);
 
     /**
-     * Logs in a developer using the provided email and password.
+     * Authenticates a developer with the provided email and password.
      *
-     * @param email    the email address of the developer.
-     * @param password the password for the developer's account.
-     * @return the Developer object if login is successful.
+     * @param email    The email address of the developer.
+     * @param password The password for the developer's account.
+     * @return The authenticated {@link Developer} object.
      */
-    public Developer login(String email, String password);
-
+    Developer login(String email, String password);
+  
     /**
      * Retrieves the currently logged-in developer.
      *
-     * @return the Developer object representing the currently logged-in developer.
+     * @return The {@link Developer} object representing the current developer.
      */
-    public Developer getCurrentDeveloper();
+    Developer getCurrentDeveloper();
 
     /**
-     * Retrieves a developer by their unique developer ID.
+     * Retrieves a developer by their unique ID.
      *
-     * @param developerId the unique identifier of the developer.
-     * @return the Developer object associated with the provided developer ID.
+     * @param developerId The unique ID of the developer.
+     * @return The {@link Developer} object representing the developer with the specified ID.
      */
-    public Developer getDeveloper(int developerId);
+    Developer getDeveloper(int developerId);
 
     /**
-     * Closes a bug by its unique bug ID.
+     * Closes a bug by marking it as resolved.
      *
-     * @param bugId the unique identifier of the bug to be closed.
+     * @param bugId The unique ID of the bug to be closed.
      */
-    public void closeBug(int bugId);
+    void closeBug(int bugId);
 
     /**
-     * Retrieves the project assigned to the currently logged-in developer.
+     * Retrieves a list of projects assigned to the currently logged-in developer.
      *
-     * @return the Project object representing the assigned project.
+     * @return A {@link List} of {@link Project} objects assigned to the current developer.
      */
-    public Project getAssignedProject();
+    List<Project> getAssignedProjects();
 
     /**
-     * Retrieves the project assigned to a specific developer by their unique developer ID.
+     * Retrieves a list of projects assigned to a specific developer.
      *
-     * @param developerId the unique identifier of the developer.
-     * @return the Project object representing the assigned project for the specified developer.
+     * @param developerId The unique ID of the developer whose assigned projects are to be retrieved.
+     * @return A {@link List} of {@link Project} objects assigned to the specified developer.
      */
-    public Project getAssignedProject(int developerId);
+    List<Project> getAssignedProjects(int developerId);
 
     /**
-     * Retrieves the list of bugs assigned to the currently logged-in developer.
+     * Retrieves a list of bugs assigned to the currently logged-in developer.
      *
-     * @return a list of Bug objects representing the assigned bugs.
+     * @return A {@link List} of {@link Bug} objects assigned to the current developer.
      */
-    public List<Bug> getAssignedBugs();
+    List<Bug> getAssignedBugs();
 }
+

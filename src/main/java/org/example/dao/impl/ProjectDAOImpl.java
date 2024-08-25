@@ -1,13 +1,11 @@
 package org.example.dao.impl;
 
 import org.example.dao.IProjectDAO;
+import org.example.exceptions.projects.ProjectNotFoundException;
 import org.example.models.*;
 import org.example.util.MySQLConnection;
 
-import java.sql.Connection;
-import java.sql.Date;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -15,7 +13,7 @@ import java.util.stream.Collectors;
 public class ProjectDAOImpl  implements IProjectDAO {
 
     @Override
-    public Project saveProject(Project project) {
+    public Project saveProject(Project project) throws SQLException {
        String query = "INSERT INTO projects (project_name, start_date, status, project_manager_id) VALUES (?, ?, ?, ?)";
 
         try (Connection connection = MySQLConnection.getConnection()) {
@@ -26,20 +24,17 @@ public class ProjectDAOImpl  implements IProjectDAO {
             ps.setInt(4, project.getProjectManagerId());
             ps.executeUpdate();
             ResultSet rs = ps.getGeneratedKeys();
-            if (rs.next()) {
-                project.setProjectId(rs.getInt(1));
-            }
+            rs.next();
+            project.setProjectId(rs.getInt(1));
+
             return project;
 
-
-        }catch (Exception e) {
-            throw new RuntimeException(e);
         }
 
     }
 
     @Override
-    public Project findByID(int projectId) {
+    public Project findByID(int projectId) throws SQLException, ProjectNotFoundException {
 //       get project and all the bugs associated with it
         String sql = "SELECT * FROM projects WHERE project_id = ?";
         try (Connection connection = MySQLConnection.getConnection()) {
@@ -48,22 +43,20 @@ public class ProjectDAOImpl  implements IProjectDAO {
             ResultSet rs = ps.executeQuery();
 
             if (rs.next()) {
-                Project project = new Project(rs.getInt("project_id"), rs.getString("project_name"), rs.getDate("start_date").toLocalDate().atTime(0,0), rs.getString("status"), rs.getInt("project_manager_id"), new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
+                Project project = new Project(rs.getInt("project_id"), rs.getString("project_name"), rs.getDate("start_date").toLocalDate().atTime(0, 0), rs.getString("status"), rs.getInt("project_manager_id"), new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
 
                 project.setDevelopers(this.getAssignedDevelopers(projectId).stream().map(User::getId).collect(Collectors.toList()));
                 project.setTesters(this.getAssignedTesters(projectId).stream().map(User::getId).collect(Collectors.toList()));
                 project.setBugs(this.getProjectBugs(projectId));
                 return project;
             }
-
-        } catch (Exception e) {
-            throw new RuntimeException(e);
+            throw new ProjectNotFoundException(projectId);
         }
-        throw new RuntimeException("Project not found");
+
     }
 
     @Override
-    public List<Project> findProjectsByManager(int managerId) {
+    public List<Project> findProjectsByManager(int managerId) throws SQLException {
         String sql = "SELECT * FROM projects WHERE project_manager_id = ?";
         List<Project> projects = new ArrayList<>();
         try (Connection connection = MySQLConnection.getConnection()) {
@@ -78,13 +71,11 @@ public class ProjectDAOImpl  implements IProjectDAO {
                 projects.add(project);
             }
             return projects;
-        } catch (Exception e) {
-            throw new RuntimeException(e);
         }
     }
 
     @Override
-    public List<Project> findProjectsByTester(int testerId) {
+    public List<Project> findProjectsByTester(int testerId) throws SQLException {
         String sql = "SELECT * FROM projects WHERE project_id IN (SELECT project_id FROM testers_projects WHERE tester_id = ?)";
         List<Project> projects = new ArrayList<>();
         try (Connection connection = MySQLConnection.getConnection()) {
@@ -99,34 +90,32 @@ public class ProjectDAOImpl  implements IProjectDAO {
                 projects.add(project);
             }
             return projects;
-        } catch (Exception e) {
-            throw new RuntimeException(e);
         }
     }
 
     @Override
-    public Project findProjectByDeveloper(int developerId) {
+    public List<Project>  findProjectsByDeveloper(int developerId) throws SQLException {
         String sql = "SELECT * FROM projects WHERE project_id IN (SELECT project_id FROM developers_projects WHERE developer_id = ?)";
         try (Connection connection = MySQLConnection.getConnection()) {
             PreparedStatement ps = connection.prepareStatement(sql);
             ps.setInt(1, developerId);
             ResultSet rs = ps.executeQuery();
+            List<Project> projects = new ArrayList<>();
 
-            if (rs.next()) {
+            while (rs.next()) {
                 Project project = new Project(rs.getInt("project_id"), rs.getString("project_name"), rs.getDate("start_date").toLocalDate().atTime(0,0), rs.getString("status"), rs.getInt("project_manager_id"), new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
                 project.setDevelopers(this.getAssignedDevelopers(project.getProjectId()).stream().map(User::getId).collect(Collectors.toList()));
                 project.setTesters(this.getAssignedTesters(project.getProjectId()).stream().map(User::getId).collect(Collectors.toList()));
                 project.setBugs(this.getProjectBugs(project.getProjectId()));
-                return project;
+                projects.add(project);
             }
-        } catch (Exception e) {
-            throw new RuntimeException(e);
+            return projects;
         }
-        throw new RuntimeException("Project not found");
+
     }
 
     @Override
-    public Project assignTester(int projectId, int testerId) {
+    public Project assignTester(int projectId, int testerId) throws SQLException {
         String sql = "INSERT INTO testers_projects (project_id, tester_id) VALUES (?, ?)";
         try (Connection connection = MySQLConnection.getConnection()) {
             PreparedStatement ps = connection.prepareStatement(sql);
@@ -134,13 +123,11 @@ public class ProjectDAOImpl  implements IProjectDAO {
             ps.setInt(2, testerId);
             ps.executeUpdate();
             return findByID(projectId);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
         }
     }
 
     @Override
-    public Project assignDeveloper(int projectId, int developerId) {
+    public Project assignDeveloper(int projectId, int developerId) throws SQLException {
       String sql = "INSERT INTO developers_projects (developer_id, project_id) VALUES (?, ?)";
         try (Connection connection = MySQLConnection.getConnection()) {
             PreparedStatement ps = connection.prepareStatement(sql);
@@ -148,13 +135,11 @@ public class ProjectDAOImpl  implements IProjectDAO {
             ps.setInt(2, projectId);
             ps.executeUpdate();
             return findByID(projectId);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
         }
     }
 
     @Override
-    public List<Developer> getAssignedDevelopers(int projectId) {
+    public List<Developer> getAssignedDevelopers(int projectId) throws SQLException {
         String sql  = "SELECT * FROM developers INNER JOIN users ON developers.user_id = users.user_id WHERE developers.user_id IN (SELECT developer_id FROM developers_projects WHERE project_id = ?)";
         List<Developer> developers = new ArrayList<>();
         try (Connection connection = MySQLConnection.getConnection()) {
@@ -166,13 +151,11 @@ public class ProjectDAOImpl  implements IProjectDAO {
                 developers.add(developer);
             }
             return developers;
-        } catch (Exception e) {
-            throw new RuntimeException(e);
         }
     }
 
     @Override
-    public List<Tester> getAssignedTesters(int projectId) {
+    public List<Tester> getAssignedTesters(int projectId) throws SQLException {
         String sql  = "SELECT * FROM testers INNER JOIN users ON testers.user_id = users.user_id WHERE tester_id IN (SELECT tester_id FROM testers_projects WHERE project_id = ?)";
         List<Tester> testers = new ArrayList<>();
         try (Connection connection = MySQLConnection.getConnection()) {
@@ -184,13 +167,11 @@ public class ProjectDAOImpl  implements IProjectDAO {
                 testers.add(tester);
             }
             return testers;
-        } catch (Exception e) {
-            throw new RuntimeException(e);
         }
     }
 
     @Override
-    public List<Bug> getProjectBugs(int projectId) {
+    public List<Bug> getProjectBugs(int projectId) throws SQLException {
         String sql = "SELECT * FROM bugs WHERE project_id = ?";
         List<Bug> bugs = new ArrayList<>();
         try (Connection connection = MySQLConnection.getConnection()) {
@@ -202,8 +183,6 @@ public class ProjectDAOImpl  implements IProjectDAO {
                 bugs.add(bug);
             }
             return bugs;
-        } catch (Exception e) {
-            throw new RuntimeException(e);
         }
     }
 }
