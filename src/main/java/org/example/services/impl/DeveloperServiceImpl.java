@@ -63,6 +63,15 @@ public class DeveloperServiceImpl extends UserServiceImpl  implements IDeveloper
 
     @Override
     public void closeBug(int bugId) {
+
+         boolean isAssignedToCurrentDev = this.getAssignedBugs().stream().anyMatch(bug -> bug.getId() == bugId);
+         if(!isAssignedToCurrentDev) {
+             throw new UserNotAuthorizedException("Bug is not assigned to current developer");
+         }
+
+
+
+
         BugServiceImpl bugService = new BugServiceImpl();
         bugService.closeBug(bugId);
 

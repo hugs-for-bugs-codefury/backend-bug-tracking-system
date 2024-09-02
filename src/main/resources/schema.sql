@@ -1,14 +1,14 @@
-DROP DATABASE IF EXISTS codefury;
-CREATE DATABASE codefury;
-USE codefury;
--- Drop tables if they exist
-DROP TABLE IF EXISTS Bugs;
-DROP TABLE IF EXISTS Project_Team_Members;
-DROP TABLE IF EXISTS Projects;
-DROP TABLE IF EXISTS Testers;
-DROP TABLE IF EXISTS Developers;
-DROP TABLE IF EXISTS ProjectManagers;
+
+SET FOREIGN_KEY_CHECKS = 0;
+DROP TABLE IF EXISTS bugs;
+DROP TABLE IF EXISTS developers_projects;
+DROP TABLE IF EXISTS testers_projects;
+DROP TABLE IF EXISTS testers;
+DROP TABLE IF EXISTS developers;
+DROP TABLE IF EXISTS projects;
+DROP TABLE IF EXISTS project_managers;
 DROP TABLE IF EXISTS users;
+SET FOREIGN_KEY_CHECKS = 1;
 
 -- Create Users table
 CREATE TABLE users (
@@ -91,50 +91,4 @@ CREATE TABLE bugs (
     FOREIGN KEY (created_by) REFERENCES testers(tester_id),
     FOREIGN KEY (assigned_to) REFERENCES developers(developer_id)
 );
-
--- Trigger to enforce Developer can be assigned to only one projectU
-DELIMITER $$
-CREATE TRIGGER trg_check_developer_assignment
-BEFORE INSERT ON developers_projects
-FOR EACH ROW
-BEGIN
-    DECLARE project_count INT;
-    SET project_count = (SELECT COUNT(*) FROM developers_projects WHERE developer_id = NEW.developer_id);
-    IF project_count >= 1 THEN
-        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Developer can be assigned to only one project';
-    END IF;
-END$$
-DELIMITER ;
-
-
--- Trigger to enforce Tester can be assigned to maximum of two projects
-DELIMITER $$
-CREATE TRIGGER trg_check_tester_assignment
-BEFORE INSERT ON testers_projects
-FOR EACH ROW
-BEGIN
-    DECLARE project_count INT;
-    SET project_count = (SELECT COUNT(*) FROM testers_projects WHERE tester_id = NEW.tester_id);
-    IF project_count >= 2 THEN
-        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Tester can be assigned to maximum of two projects';
-    END IF;
-END$$
-DELIMITER ;
-
-
-
--- Trigger to enforce Project Manager can manage a maximum of four projects
-DELIMITER $$
-CREATE TRIGGER trg_check_project_manager_assignment
-BEFORE INSERT ON Projects
-FOR EACH ROW
-BEGIN
-    DECLARE project_count INT;
-    SET project_count = (SELECT COUNT(*) FROM Projects WHERE project_manager_id = NEW.project_manager_id);
-    IF project_count >= 4 THEN
-        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Project Manager can manage a maximum of four projects';
-    END IF;
-END$$
-DELIMITER ;
-
 

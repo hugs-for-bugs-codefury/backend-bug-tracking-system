@@ -30,7 +30,18 @@ public class MySQLConnectionTest {
             fail("SQLException: " + e.getMessage());
         }
 
+    }
 
+    @DisplayName("Test DB Setup functionality")
+    @Test
+    void testSetup() {
+        assertDoesNotThrow(MySQLConnection::setup);
+    }
+
+    @DisplayName("Test DB Seed functionality")
+    @Test
+    void testSeed() {
+        assertDoesNotThrow(MySQLConnection::seed);
     }
 
 }

@@ -44,7 +44,7 @@ public class DeveloperDAOImpl extends UserDAOImpl implements IDeveloperDAO {
 
     @Override
     public List<Project> getAssignedProjects(int developerId) throws SQLException {
-        String sql = "SELECT * FROM projects INNER JOIN project_developers ON projects.project_id = project_developers.project_id WHERE project_developers.developer_id = ?";
+        String sql = "SELECT * FROM projects INNER JOIN developers_projects ON projects.project_id = developers_projects.project_id WHERE developers_projects.developer_id = ?";
         try (Connection connection = MySQLConnection.getConnection()) {
             PreparedStatement ps = connection.prepareStatement(sql);
             ps.setInt(1, developerId);
@@ -54,7 +54,7 @@ public class DeveloperDAOImpl extends UserDAOImpl implements IDeveloperDAO {
 
                 ProjectServiceImpl projectService = new ProjectServiceImpl();
 
-                Project project = new Project(rs.getInt("project_name"), rs.getString("name"), rs.getDate("created_on").toLocalDate().atTime(0, 0), rs.getString("status"), rs.getInt("created_by"), null, null, null);
+                Project project = new Project(rs.getInt("project_id"), rs.getString("project_name"), rs.getDate("start_date").toLocalDate().atTime(0, 0), rs.getString("status"), rs.getInt("project_manager_id"), null, null, null);
 
 
                 project.setTesters(projectService.getAssignedTesters(project.getProjectId()).stream().map(User::getId).collect(Collectors.toList()));

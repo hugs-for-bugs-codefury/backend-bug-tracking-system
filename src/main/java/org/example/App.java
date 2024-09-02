@@ -27,11 +27,11 @@ public class App {
 
             // ================================== Registering Users ==================================
 
-            ProjectManager pm = projectManagerService.registerUser("Project Manager", DummyData.getPersonEmail("project_manager"), "password1");
-            Developer dev1 = developerService.registerUser("Developer 1", DummyData.getPersonEmail("developer"), "password2");
-            Developer dev2 = developerService.registerUser("Developer 2", DummyData.getPersonEmail("developer"), "password3");
-            Tester tester1 = testerService.registerUser("Tester 1", DummyData.getPersonEmail("tester"), "password4");
-            Tester tester2 = testerService.registerUser("Tester 2", DummyData.getPersonEmail("tester"), "password5");
+            ProjectManager pm = projectManagerService.registerUser("Project Manager", DummyData.getPersonEmail("project_manager"), "password");
+            Developer dev1 = developerService.registerUser("Developer 1", DummyData.getPersonEmail("developer"), "password");
+            Developer dev2 = developerService.registerUser("Developer 2", DummyData.getPersonEmail("developer"), "password");
+            Tester tester1 = testerService.registerUser("Tester 1", DummyData.getPersonEmail("tester"), "password");
+            Tester tester2 = testerService.registerUser("Tester 2", DummyData.getPersonEmail("tester"), "password");
 
 
             // ================================== Project Manager ==================================
@@ -42,7 +42,7 @@ public class App {
             System.out.println("▶️Project manager logs in");
 
 
-            pm = projectManagerService.login(pm.getEmail(), "password1");
+            pm = projectManagerService.login(pm.getEmail(), "password");
             System.out.println(pm);
 
 
@@ -74,7 +74,7 @@ public class App {
             // 1. Tester logs in
             System.out.println("▶️Tester1 logs in");
 
-            tester1 = testerService.login(tester1.getEmail(), "password4");
+            tester1 = testerService.login(tester1.getEmail(), "password");
             System.out.println(tester1);
 
 
@@ -106,7 +106,7 @@ public class App {
             // 1. Developer logs in
             System.out.println("▶️Developer logs in");
 
-            dev1 = developerService.login(dev1.getEmail(), "password2");
+            dev1 = developerService.login(dev1.getEmail(), "password");
             System.out.println(dev1);
 
 

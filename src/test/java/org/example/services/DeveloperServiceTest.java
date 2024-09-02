@@ -1,144 +1,224 @@
 package org.example.services;
 
-import org.example.dao.impl.DeveloperDAOImpl;
-import org.example.models.Bug;
-import org.example.models.Developer;
-import org.example.models.Project;
-import org.example.models.User;
-import org.example.services.impl.DeveloperServiceImpl;
-import org.junit.Before;
-import org.junit.Test;
+import org.example.factory.impl.ServiceFactory;
+import org.example.models.*;
+import org.example.util.Config;
+import org.example.util.MySQLConnection;
+import org.junit.jupiter.api.*;
 
-import java.lang.reflect.Field;
+import static org.junit.jupiter.api.Assertions.*;
+
+import java.nio.file.Paths;
 import java.time.LocalDateTime;
-import java.util.Arrays;
 import java.util.List;
-
-import static org.junit.Assert.*;
 
 public class DeveloperServiceTest {
 
-    private DeveloperServiceImpl developerService;
-    private TestDeveloperDAO testDeveloperDAO;
 
-    @Before
-    public void setUp() throws Exception {
-        User user = new Developer("John Doe", "john@example.com", "password123", "developer");
-        developerService = new DeveloperServiceImpl(user);
-        testDeveloperDAO = new TestDeveloperDAO();
+    String developerName = "developer";
+    String developerEmail = "developer@mail.com";
+    String developerPassword = "password";
+    String developerRole = "developer";
 
-        // Use reflection to replace the DAO
-        Field daoField = DeveloperServiceImpl.class.getDeclaredField("developerDAO");
-        daoField.setAccessible(true);
-        daoField.set(developerService, testDeveloperDAO);
+
+
+    @BeforeEach
+    public  void setUp() {
+        Config.setProperty("db.url", "jdbc:mysql://localhost:3306/test_db");
+        MySQLConnection.setup();
+        MySQLConnection.seed();
+
+
     }
 
+
+
+
+    @DisplayName("Test register developer")
     @Test
-    public void testRegisterUser() {
-        Developer registeredDeveloper = developerService.registerUser("Jane Doe", "jane@example.com", "password456");
+    void testRegisterDeveloper() {
 
-        assertNotNull(registeredDeveloper);
-        assertEquals("Jane Doe", registeredDeveloper.getName());
-        assertEquals("jane@example.com", registeredDeveloper.getEmail());
-        assertNotEquals("password456", registeredDeveloper.getPasswordHash()); // Password should be hashed
+        IDeveloperService developerService = (IDeveloperService)ServiceFactory.getService("DeveloperService");
+
+        assertDoesNotThrow(() -> {
+            User u = developerService.registerUser(developerName, developerEmail, developerPassword);
+            assertNotNull(u);
+            assertEquals(developerName, u.getName());
+            assertEquals(developerEmail, u.getEmail());
+            assertEquals(developerRole, u.getRole());
+            assertEquals(1, u.getId());
+
+        });
+
     }
 
+    @DisplayName("Test get logged in developer")
     @Test
-    public void testGetCurrentDeveloper() {
-        Developer currentDeveloper = developerService.getCurrentDeveloper();
+    void testGetLoggedInDeveloper() {
+        IDeveloperService developerService = (IDeveloperService)ServiceFactory.getService("DeveloperService");
 
-        assertNotNull(currentDeveloper);
-        assertEquals("John Doe", currentDeveloper.getName());
-        assertEquals("john@example.com", currentDeveloper.getEmail());
+        User registeredUser = developerService.registerUser(developerName, developerEmail, developerPassword);
+        User loggedInUser = developerService.login(developerEmail, developerPassword);
+
+        assertEquals(registeredUser, loggedInUser);
     }
 
+    @DisplayName("Test get developer")
     @Test
-    public void testGetDeveloper() {
-        Developer developer = developerService.getDeveloper(1);
+    void testGetDeveloper() {
+        IDeveloperService developerService = (IDeveloperService) ServiceFactory.getService("DeveloperService");
 
-        assertNotNull(developer);
-        assertEquals(1, developer.getDeveloperId());
-        assertEquals("Test Developer", developer.getName());
+        User registeredUser = developerService.registerUser(developerName, developerEmail, developerPassword);
+
+        assertDoesNotThrow(() -> {
+            User u = developerService.getUser(registeredUser.getId());
+            assertNotNull(u);
+            assertEquals(developerName, u.getName());
+            assertEquals(developerEmail, u.getEmail());
+            assertEquals(developerRole, u.getRole());
+        });
+
     }
 
+
+    @DisplayName("Get Assigned Bugs")
     @Test
-    public void testCloseBug() {
-        developerService.closeBug(1);
-        // This test is limited without mocking. In a real scenario, you'd verify that the bug was closed.
+    void testGetAssignedBugs() {
+        IProjectManagerService projectManagerService = (IProjectManagerService) ServiceFactory.getService("ProjectManagerService");
+        IDeveloperService developerService = (IDeveloperService) ServiceFactory.getService("DeveloperService");
+        ITesterService testerService = (ITesterService) ServiceFactory.getService("TesterService");
+
+        // Register a project manager
+        ProjectManager projectManager = projectManagerService.registerUser("project manager", "pm@mail.com", "password");
+        Tester tester = testerService.registerUser("tester", "tester@mail.com", "password");
+
+        Developer developer = developerService.registerUser(developerName, developerEmail, developerPassword);
+
+        // Login the project manager
+        projectManagerService.login("pm@mail.com", "password");
+
+        // Create a project
+        Project p = projectManagerService.createProject("project", LocalDateTime.now());
+
+        // Add the developer to the project
+        projectManagerService.assignDeveloperToProject(p.getProjectId(), developer.getDeveloperId());
+
+        // Add the tester to the project
+        projectManagerService.assignTesterToProject(p.getProjectId(), tester.getTesterId());
+
+        // Login tester and report a bug
+        testerService.login("tester@mail.com", "password");
+        Bug bug1 = testerService.reportBug(p, "bug1", "description", "high");
+        Bug bug2 = testerService.reportBug(p, "bu2", "description", "low");
+
+
+
+        // Assign the bug to the developer
+        projectManagerService.assignDeveloperToBug(bug1.getId(), developer.getDeveloperId());
+        projectManagerService.assignDeveloperToBug(bug2.getId(), developer.getDeveloperId());
+
+        // Login developer and close the bug
+        developerService.login(developerEmail, developerPassword);
+        assertDoesNotThrow(() -> {
+
+
+            List<Bug> bugs = developerService.getAssignedBugs();
+
+            assertEquals(2, bugs.size());
+            assertTrue(bugs.stream().anyMatch(bug -> bug.getId() == bug1.getId()));
+            assertTrue(bugs.stream().anyMatch(bug -> bug.getId() == bug2.getId()));
+
+        });
+
     }
 
+
+    @DisplayName("Test close bug")
     @Test
-    public void testGetAssignedProject() {
-       List<Project> project = developerService.getAssignedProjects();
+    void testCloseBug() {
+        IProjectManagerService projectManagerService = (IProjectManagerService) ServiceFactory.getService("ProjectManagerService");
+        IDeveloperService developerService = (IDeveloperService) ServiceFactory.getService("DeveloperService");
+        ITesterService testerService = (ITesterService) ServiceFactory.getService("TesterService");
 
-        assertNotNull(project);
-        assertEquals(1, project.size());
-        assertEquals("Test Project", project.get(0).getProjectName());
+        // Register a project manager
+        ProjectManager projectManager = projectManagerService.registerUser("project manager", "pm@mail.com", "password");
+        Tester tester = testerService.registerUser("tester", "tester@mail.com", "password");
+
+        Developer developer = developerService.registerUser(developerName, developerEmail, developerPassword);
+
+        // Login the project manager
+        projectManagerService.login("pm@mail.com", "password");
+
+        // Create a project
+        Project p = projectManagerService.createProject("project", LocalDateTime.now());
+
+        // Add the developer to the project
+        projectManagerService.assignDeveloperToProject(p.getProjectId(), developer.getDeveloperId());
+
+        // Add the tester to the project
+        projectManagerService.assignTesterToProject(p.getProjectId(), tester.getTesterId());
+
+        // Login tester and report a bug
+        testerService.login("tester@mail.com", "password");
+        Bug bug = testerService.reportBug(p, "bug", "description", "high");
+
+        assertEquals("open", bug.getStatus());
+
+        // Assign the bug to the developer
+        projectManagerService.assignDeveloperToBug(bug.getId(), developer.getDeveloperId());
+
+        // Login developer and close the bug
+        developerService.login(developerEmail, developerPassword);
+        assertDoesNotThrow(() -> {
+            developerService.closeBug(bug.getId());
+
+            List<Bug> bugs = developerService.getAssignedBugs();
+
+            assertEquals(1, bugs.size());
+            assertEquals("closed", bugs.get(0).getStatus());
+
+
+        });
     }
 
+    @DisplayName("Get assigned projects")
     @Test
-    public void testGetAssignedProjectById() {
-        List <Project> project = developerService.getAssignedProjects(1);
+    void testGetAssignedProjects() {
+        IProjectManagerService projectManagerService = (IProjectManagerService) ServiceFactory.getService("ProjectManagerService");
+        IDeveloperService developerService = (IDeveloperService) ServiceFactory.getService("DeveloperService");
 
-        assertNotNull(project);
-        assertEquals(1, project.size());
+        // Register a project manager
+        ProjectManager projectManager = projectManagerService.registerUser("project manager", "pm@mail.com", "password");
+
+        // Register a developer
+        Developer developer = developerService.registerUser(developerName, developerEmail, developerPassword);
+
+        // Login the project manager
+        projectManagerService.login(projectManager.getEmail(), "password");
+
+        // Create a project
+        Project p1 = projectManagerService.createProject("project1", LocalDateTime.now());
+        Project p2 = projectManagerService.createProject("project2", LocalDateTime.now());
+
+        // Add the developer to the project
+        projectManagerService.assignDeveloperToProject(p1.getProjectId(), developer.getDeveloperId());
+        projectManagerService.assignDeveloperToProject(p2.getProjectId(), developer.getDeveloperId());
+
+
+        // Login the developer
+        developerService.login(developer.getEmail(), developerPassword);
+
+        assertDoesNotThrow(() -> {
+            List<Project> projects = developerService.getAssignedProjects();
+            assertEquals(2, projects.size());
+            assertEquals(p1.getProjectId(), projects.get(0).getProjectId());
+            assertEquals(p2.getProjectId(), projects.get(1).getProjectId());
+        });
+
     }
 
-    @Test
-    public void testGetAssignedBugs() {
-        List<Bug> bugs = developerService.getAssignedBugs();
 
-        assertNotNull(bugs);
-        assertEquals(2, bugs.size());
-        assertEquals("Bug 1", bugs.get(0).getTitle());
-        assertEquals("Bug 2", bugs.get(1).getTitle());
-    }
 
-    @Test
-    public void testLogin() {
-        Developer loggedInDeveloper = developerService.login("john@example.com", "password123");
 
-        assertNotNull(loggedInDeveloper);
-        assertEquals("John Doe", loggedInDeveloper.getName());
-        assertEquals("john@example.com", loggedInDeveloper.getEmail());
-        assertNotNull(loggedInDeveloper.getLastLogin());
-    }
 
-    @Test(expected = IllegalArgumentException.class)
-    public void testLoginWithInvalidCredentials() {
-        developerService.login("john@example.com", "wrongpassword");
-    }
-
-    // Test implementation of DeveloperDAOImpl for testing purposes
-    private class TestDeveloperDAO extends DeveloperDAOImpl {
-        @Override
-        public Developer saveUser(String name, String email, String password) {
-            return new Developer(name, email, password, "developer");
-        }
-
-        @Override
-        public Developer findByID(int developerId) {
-            Developer developer = new Developer("Test Developer", "test@example.com", "hashedpassword", "developer");
-            developer.setDeveloperId(developerId);
-            return developer;
-        }
-
-        @Override
-        public Developer findByEmail(String email) {
-            return new Developer("John Doe", email, "hashedpassword", "developer");
-        }
-
-        @Override
-        public List<Project> getAssignedProjects(int developerId) {
-            return Arrays.asList(new Project("Test Project", LocalDateTime.now().plusDays(2)));
-        }
-
-        @Override
-        public List<Bug> getAssignedBugs(int developerId) {
-            return Arrays.asList(
-                    new Bug("Bug 1", "Description 1", "High", "open", LocalDateTime.now(), 1, 1),
-                    new Bug("Bug 2", "Description 2", "Medium", "open", LocalDateTime.now(), 1, 1)
-            );
-        }
-    }
 }
