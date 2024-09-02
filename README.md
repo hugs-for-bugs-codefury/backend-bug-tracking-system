@@ -22,9 +22,8 @@ What things you need to install the software and how to install them.
 
 ```
 java 22
-mysql
-java 22
-mysql
+mysql server
+maven
 ```
 
 
@@ -38,7 +37,7 @@ git clone https://github.com/hugs-for-bugs-codefury/backend-bug-tracking-system.
 
 Or, if you are using SSH use:
 
-```
+```bash
 git clone git@github.com:hugs-for-bugs-codefury/backend-bug-tracking-system.git
 ```
 
